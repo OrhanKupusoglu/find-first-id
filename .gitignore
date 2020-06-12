@@ -1,0 +1,12 @@
+.vscode/
+.idea/
+build/
+runs/
+run*
+bitops
+kupid
+test-kupid
+bmark-kupid
+*.json
+*.csv
+*.out
