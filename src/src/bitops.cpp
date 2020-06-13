@@ -8,12 +8,13 @@
 
 // g++ -std=c++14 bitops.cpp -o bitops
 
+#define OFFSET_1        "                           " << std::setfill(' ') << std::setw(20)
 #define ENDIANNESS      " HIGHEST ADDRESS                                                              LOWEST ADDRESS\n"\
                         "---------------+------------------------ LITTLE ENDIAN -----------------------+----------------\n"
 #define MOST_SGN        "MOST SIGNIFICANT\n"\
                         "---------------+--------------------------------------------------------------+----------------\n"\
                         "               +      1       2       3       4       5       6       7       8\n"
-#define OFFSET          "               "
+#define OFFSET_2        "               "
 #define LEAST_SGN       "               8       7       6       5       4       3       2       1      +\n"\
                         "---------------+--------------------------------------------------------------+----------------\n"\
                         "                                                                              LEAST SIGNIFICANT\n"
@@ -50,11 +51,11 @@ int main(int argc, char** argv) {
     std::bitset<64> bits(num64);
     std::bitset<64> comp_bits(~num64);
 
-    std::cout << OFFSET << num64 << " = 0x" << HEX_FORMAT << num64 << "\n\n";
+    std::cout << OFFSET_1 << num64 << " = 0x" << HEX_FORMAT << num64 << "\n\n";
     std::cout << ENDIANNESS;
     std::cout << MOST_SGN;
-    std::cout << OFFSET << bits << " :  bits\n"
-              << OFFSET << comp_bits << " : ~bits\n";
+    std::cout << OFFSET_2 << bits << " :  bits\n"
+              << OFFSET_2 << comp_bits << " : ~bits\n";
     std::cout << LEAST_SGN;
 
 #if __cplusplus > 201703L  // C++20
@@ -107,7 +108,7 @@ int main(int argc, char** argv) {
 
     int ffs2 = __builtin_ffsll(~num64) - 1;
     bit_op = "__builtin_ffsll";
-    std::cout << "\n" << bit_op << "(~x) - 1 : returns position of the first zero bit to be marked as one.\n";
+    std::cout << "\n" << bit_op << "(~x) - 1 : returns position of the first zero bit in x\n";
     auto comp_num64 = ~num64;
     std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << comp_num64 << ") - 1 = " << DEC_FORMAT << ffs2 << "\n\n";
 #endif
