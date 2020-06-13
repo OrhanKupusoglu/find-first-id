@@ -32,7 +32,7 @@ Ordered sets, [std::set](https://en.cppreference.com/w/cpp/container/set), provi
 
 &nbsp;
 
-## BitTree
+## Algorithm
 
 A BitTree can be imagined as layers of bit streams, where each bit indicates positions of the free bits on the next layer.
 
@@ -68,6 +68,10 @@ This is far more efficient than looping over the data layer to find a vacant pos
 
 ```
 
+With byte positions the [Endianness](https://en.wikipedia.org/wiki/Endianness) of the underlying hardware becomes important.
+
+The current implementation assumes a **Little Endian** system.
+
 &nbsp;
 
 ## Bit Operations
@@ -88,15 +92,17 @@ usage:
         applies and displays bit ops on the number
 
 $ ./bitops
-               1085102592571150095 = 0x0F0F0F0F0F0F0F0F
+                            1085102592571150095 = 0x0F0F0F0F0F0F0F0F
 
+ HIGHEST ADDRESS                                                              LOWEST ADDRESS
+---------------+------------------------ LITTLE ENDIAN -----------------------+----------------
 MOST SIGNIFICANT
----------------+-------------------------------------------------------------------------------
+---------------+--------------------------------------------------------------+----------------
                +      1       2       3       4       5       6       7       8
                0000111100001111000011110000111100001111000011110000111100001111 :  bits
                1111000011110000111100001111000011110000111100001111000011110000 : ~bits
                8       7       6       5       4       3       2       1      +
-------------------------------------------------------------------------------+----------------
+---------------+--------------------------------------------------------------+----------------
                                                                               LEAST SIGNIFICANT
 
 __builtin_popcountll(x) : returns the number of 1-bits in x
@@ -113,7 +119,7 @@ warning - if x is 0, the result is undefined
 __builtin_ffsll(x) : returns one plus the index of the least significant 1-bit of x, or if x is zero, returns zero
         __builtin_ffsll(0x0F0F0F0F0F0F0F0F) = 1
 
-__builtin_ffsll(~x) - 1 : returns position of the first zero bit to be marked as one.
+__builtin_ffsll(~x) - 1 : returns position of the first zero bit in x
         __builtin_ffsll(0xF0F0F0F0F0F0F0F0) - 1 = 4
 ```
 
