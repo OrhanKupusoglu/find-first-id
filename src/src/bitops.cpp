@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
         }
 
         try {
-            num64 = std::stoi(argv[1]);
+            num64 = std::stoull(argv[1]);
         } catch (std::invalid_argument const &e) {
             std::cerr << "ERROR: bad input - " << argv[1] << " | " << e.what() << "\n\n";
             return 1;
