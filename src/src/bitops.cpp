@@ -8,12 +8,14 @@
 
 // g++ -std=c++14 bitops.cpp -o bitops
 
+#define ENDIANNESS      " HIGHEST ADDRESS                                                              LOWEST ADDRESS\n"\
+                        "---------------+------------------------ LITTLE ENDIAN -----------------------+----------------\n"
 #define MOST_SGN        "MOST SIGNIFICANT\n"\
-                        "---------------+-------------------------------------------------------------------------------\n"\
+                        "---------------+--------------------------------------------------------------+----------------\n"\
                         "               +      1       2       3       4       5       6       7       8\n"
 #define OFFSET          "               "
 #define LEAST_SGN       "               8       7       6       5       4       3       2       1      +\n"\
-                        "------------------------------------------------------------------------------+----------------\n"\
+                        "---------------+--------------------------------------------------------------+----------------\n"\
                         "                                                                              LEAST SIGNIFICANT\n"
 #define HEX_FORMAT      std::setfill('0') << std::setw(16) << std::uppercase << std::hex
 #define DEC_FORMAT      std::dec
@@ -49,6 +51,7 @@ int main(int argc, char** argv) {
     std::bitset<64> comp_bits(~num64);
 
     std::cout << OFFSET << num64 << " = 0x" << HEX_FORMAT << num64 << "\n\n";
+    std::cout << ENDIANNESS;
     std::cout << MOST_SGN;
     std::cout << OFFSET << bits << " :  bits\n"
               << OFFSET << comp_bits << " : ~bits\n";
