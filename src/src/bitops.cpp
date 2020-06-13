@@ -63,25 +63,25 @@ int main(int argc, char** argv) {
     std::cout << '\n' << bit_op << "(x) : returns the number of 1 bits in the value of x\n";
     std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << num64 << ") = " << DEC_FORMAT << popcount << '\n';
 
-    int clz = std::countl_zero(num64);
+    int countl_zero = std::countl_zero(num64);
     bit_op = "std::countl_zero";
     std::cout << '\n' << bit_op << "(x) : returns the number of consecutive 0 bits in the value of x, starting from the most significant bit ('left')\n";
-    std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << num64 << ") = " << DEC_FORMAT << clz << '\n';
+    std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << num64 << ") = " << DEC_FORMAT << countl_zero << '\n';
 
-    int ctz = std::countr_zero(num64);
+    int countr_zero = std::countr_zero(num64);
     bit_op = "std::countr_zero";
     std::cout << '\n' << bit_op << "(x) : returns the number of consecutive 0 bits in the value of x, starting from the least significant bit ('right')\n";
-    std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << num64 << ") = " << DEC_FORMAT << ctz << '\n';
+    std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << num64 << ") = " << DEC_FORMAT << countr_zero << '\n';
 
-    int ffs = std::countl_one(num64);
+    int countl_one = std::countl_one(num64);
     bit_op = "std::countl_one";
     std::cout << '\n' << bit_op << "(x) : returns the number of consecutive 1 bits in the value of x, starting from the most significant bit ('left')\n";
-    std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << num64 << ") = " << DEC_FORMAT << ffs << '\n';
+    std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << num64 << ") = " << DEC_FORMAT << countl_one << '\n';
 
-    int ffs2 = std::countr_one(num64);
+    int countr_one = std::countr_one(num64);
     bit_op = "std::countr_one";
     std::cout << "\nstd::countr_one(x) : returns the number of consecutive 1 bits in the value of x, starting from the least significant bit ('right')\n";
-    std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << num64 << ") = " << DEC_FORMAT << ffs2 << '\n';
+    std::cout << '\t' << bit_op << "(0x" << HEX_FORMAT << num64 << ") = " << DEC_FORMAT << countr_one << '\n';
 #else
     int popcount = __builtin_popcountll(num64);
     bit_op = "__builtin_popcountll";
