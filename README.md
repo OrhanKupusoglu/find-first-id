@@ -10,7 +10,7 @@ Free a given ID, this ID joins to the set of available IDs.
 
 ## CPU Support
 
-The name [find-first-set, ffs](https://en.wikipedia.org/wiki/Find_first_set) comes from a [GNU GCC](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html) extension.
+The name [find-first-set, ffs](https://en.wikipedia.org/wiki/Find_first_set) is used for a [GNU GCC](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html) built-in function.
 
 > In computer software and hardware, find first set (ffs) or find first one is a bit operation that, given an unsigned machine word, designates the index or position of the least significant bit set to one in the word counting from the least significant bit position.
 
