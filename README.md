@@ -74,6 +74,8 @@ The current implementation assumes a **Little Endian** system.
 
 On C++11/14/17 for a generic solution without using compiler built-in functions, [De Bruijn sequence](https://en.wikipedia.org/wiki/De_Bruijn_sequence) **B(2,6)** may be used with preprocessor directive **DE_BRUIJN_SEQUENCE**.
 
+According to a few benchmark runs De Bruijn sequence performs only slightly less than the built-in function.
+
 **DE_BRUIJN_SEQUENCE** declaration may be enabled on [CMakeVersion.txt](./src/CMakeVersion.txt).
 
 &nbsp;
@@ -385,6 +387,13 @@ bmark-kupid - 1218880 bytes
 ++ test size: 8192
 
 $ ./bmark-kupid
+```
+
+In the current Linux system two warnings are displayed:
+
+```
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+***WARNING*** Library was built as DEBUG. Timings may be affected.
 ```
 
 There are two scripts for test runs.
