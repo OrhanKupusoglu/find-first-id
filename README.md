@@ -133,7 +133,7 @@ __builtin_ffsll(~x) - 1 : returns position of the first zero bit in x
 
 ## C++ Standard
 
-The C++ Standard can be set with the **CMakeVersion.txt**, default value is **C++14**.
+The C++ Standard can be set with the [CMakeVersion.txt](./src/CMakeVersion.txt), default value is **C++14**.
 
 For C++20 support [CMake 3.12](https://cmake.org/cmake/help/v3.12/prop_tgt/CXX_STANDARD.html) or later versions are required.
 
