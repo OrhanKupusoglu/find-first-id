@@ -158,7 +158,7 @@ CMAKE_CXX_COMPILER=/usr/bin/c++
 
 ## Source
 
-The four classes, **kupid::kbtree** and the other three control classes, are header-only C++ classes.
+The four classes, [kupid::kbtree](./src/include/kbtree.h) and the other three control classes, are header-only C++ classes.
 
 A shell script runs [CMake](https://cmake.org/), and then makes the sample application **kupid**.
 
