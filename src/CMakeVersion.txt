@@ -2,6 +2,19 @@ set(BUILD_MAJOR_VER 0)
 set(BUILD_MINOR_VER 1)
 set(BUILD_PATCH_VER 1)
 
-add_definitions(-DKUPID_VERSION="${BUILD_MAJOR_VER}.${BUILD_MINOR_VER}.${BUILD_PATCH_VER}")
-
 set(BUILD_CPP_STANDARD 14)
+
+add_definitions(-DKUPID_VERSION="${BUILD_MAJOR_VER}.${BUILD_MINOR_VER}.${BUILD_PATCH_VER}")
+add_definitions(-DDE_BRUIJN_SEQUENCE)
+
+function(find_first_id)
+    if (${BUILD_CPP_STANDARD} GREATER_EQUAL 20)
+        message("++ will use std::countr_one(x) to find the first zero bit")
+    else()
+        if(DirDefs MATCHES "DE_BRUIJN_SEQUENCE")
+            message("++ will use De Bruijn sequence B(2,6) to find the first zero bit")
+        else()
+            message("++ will use __builtin_ffsll(x) to find the first zero bit")
+        endif()
+    endif()
+endfunction(find_first_id)

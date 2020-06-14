@@ -12,21 +12,23 @@ project(${BUILD_NAME} VERSION ${BUILD_MAJOR_VER}.${BUILD_MINOR_VER}.${BUILD_PATC
 add_definitions(-DBMARK_TEST_SIZE=$ENV{BMARK_TEST_SIZE})
 
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
-message("-- Compile definitions: ${DirDefs}")
+message("++ Compile definitions: ${DirDefs}")
 
 #set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_BUILD_TYPE Release)
-message("-- CMake build type: ${CMAKE_BUILD_TYPE}")
+message("++ CMake build type: ${CMAKE_BUILD_TYPE}")
 
 set(CMAKE_CXX_STANDARD ${BUILD_CPP_STANDARD})
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-message("-- C++ standard: ${CMAKE_CXX_STANDARD}")
+message("++ C++ standard: ${CMAKE_CXX_STANDARD}")
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug )
-    message("-- C++ flags: ${CMAKE_CXX_FLAGS_DEBUG}")
+    message("++ C++ flags: ${CMAKE_CXX_FLAGS_DEBUG}")
 else()
-    message("-- C++ flags: ${CMAKE_CXX_FLAGS_RELEASE}")
+    message("++ C++ flags: ${CMAKE_CXX_FLAGS_RELEASE}")
 endif()
+
+find_first_id()
 
 set(SOURCE_FILES "./src/benchmark.cpp")
 
