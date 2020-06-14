@@ -148,7 +148,7 @@ set(BUILD_CPP_STANDARD 14)
 
 ## C++ Compiler
 
-The C++ compiler can be set with the **cxx.sh**, default compiler path is **/usr/bin/c++**.
+The C++ compiler can be set with the [cxx.sh](./src/cxx.sh), default compiler path is **/usr/bin/c++**.
 
 ```
 $ cd src
