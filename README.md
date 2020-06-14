@@ -175,13 +175,14 @@ $ ./build.sh
 -- Detecting CXX compiler ABI info - done
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Compile definitions: KUPID_VERSION="0.1.1"
--- CMake build type: Release
--- C++ standard: 14
--- C++ flags: -O3 -DNDEBUG
+++ Compile definitions: KUPID_VERSION="0.1.1"
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/orhanku/ME/DEV/OK/nuo/src/build
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/src/build
 
 Scanning dependencies of target kupid
 [ 50%] Building CXX object CMakeFiles/kupid.dir/src/main.cpp.o
@@ -265,37 +266,29 @@ $ ./build.sh
 -- Detecting CXX compiler ABI info - done
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Compile definitions: KUPID_VERSION="0.1.1"
--- CMake build type: Release
--- C++ standard: 14
--- C++ flags: -O3 -DNDEBUG
+++ Compile definitions: KUPID_VERSION="0.1.1"
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
 -- Found GTest: /usr/lib/libgtest.a
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/orhanku/ME/DEV/OK/nuo/test/build
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/test/build
 
 Scanning dependencies of target test-kupid
 [ 16%] Building CXX object CMakeFiles/test-kupid.dir/src/main.cpp.o
-[ 33%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kbset.cpp.o
-[ 50%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kbtree.cpp.o
+[ 33%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kbtree.cpp.o
+[ 50%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kbset.cpp.o
 [ 66%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kset.cpp.o
 [ 83%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kvector.cpp.o
 [100%] Linking CXX executable ../test-kupid
 [100%] Built target test-kupid
 
 ++ successfully built:
-test-kupid - 987480 bytes
+test-kupid - 992552 bytes
 
 ++ list of tests:
-TestKBSet.
-  SizeZero
-  SizeOne
-  SizeTwo
-  SizeSmall
-  SizeMedium
-  SizeLarge
-  RandomUnordered
-  RandomOrdered
 TestKBTree.
   BTreeDivMod
   BTree64BitsIsFull
@@ -310,6 +303,17 @@ TestKBTree.
   SizeZero
   SizeOne
   SizeTwo
+  ClearUseHalf
+  SizeSmall
+  SizeMedium
+  SizeLarge
+  RandomUnordered
+  RandomOrdered
+TestKBSet.
+  SizeZero
+  SizeOne
+  SizeTwo
+  ClearUseHalf
   SizeSmall
   SizeMedium
   SizeLarge
@@ -319,6 +323,7 @@ TestKSet.
   SizeZero
   SizeOne
   SizeTwo
+  ClearUseHalf
   SizeSmall
   SizeMedium
   SizeLarge
@@ -328,6 +333,7 @@ TestKVector.
   SizeZero
   SizeOne
   SizeTwo
+  ClearUseHalf
   SizeSmall
   SizeMedium
   SizeLarge
@@ -368,13 +374,14 @@ $ ./build.sh
 -- Detecting CXX compiler ABI info - done
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Compile definitions: KUPID_VERSION="0.1.1";BMARK_TEST_SIZE=8192
--- CMake build type: Release
--- C++ standard: 14
--- C++ flags: -O3 -DNDEBUG
+++ Compile definitions: KUPID_VERSION="0.1.1";BMARK_TEST_SIZE=8192
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/orhanku/ME/DEV/OK/nuo/benchmark/build
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
 
 Scanning dependencies of target bmark-kupid
 [ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
