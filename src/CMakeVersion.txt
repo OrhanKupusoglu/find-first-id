@@ -5,7 +5,7 @@ set(BUILD_PATCH_VER 1)
 set(BUILD_CPP_STANDARD 14)
 
 add_definitions(-DKUPID_VERSION="${BUILD_MAJOR_VER}.${BUILD_MINOR_VER}.${BUILD_PATCH_VER}")
-add_definitions(-DDE_BRUIJN_SEQUENCE)
+#add_definitions(-DDE_BRUIJN_SEQUENCE)
 
 function(find_first_id)
     if (${BUILD_CPP_STANDARD} GREATER_EQUAL 20)
