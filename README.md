@@ -72,6 +72,10 @@ With byte positions the [Endianness](https://en.wikipedia.org/wiki/Endianness) o
 
 The current implementation assumes a **Little Endian** system.
 
+On C++11/14/17 for a generic solution without using compiler built-in functions, [De Bruijn sequence](https://en.wikipedia.org/wiki/De_Bruijn_sequence) **B(2,6)** may be used with preprocessor directive **DE_BRUIJN_SEQUENCE**.
+
+**DE_BRUIJN_SEQUENCE** declaration may be enabled on [CMakeVersion.txt](./src/CMakeVersion.txt).
+
 &nbsp;
 
 ## Bit Operations
