@@ -133,7 +133,7 @@ __builtin_ffsll(~x) - 1 : returns position of the first zero bit in x
 
 The C++ Standard can be set with the **CMakeVersion.txt**, default value is **C++14**.
 
-Without C++20 only GNU GCC is supported.
+For C++20 support [CMake 3.12](https://cmake.org/cmake/help/v3.12/prop_tgt/CXX_STANDARD.html) or later versions are required.
 
 ```
 $ cd src
@@ -147,8 +147,6 @@ set(BUILD_CPP_STANDARD 14)
 ## C++ Compiler
 
 The C++ compiler can be set with the **cxx.sh**, default compiler path is **/usr/bin/c++**.
-
-If C++20 is available [Clang](https://clang.llvm.org/) can be tried with.
 
 ```
 $ cd src
