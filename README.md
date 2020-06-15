@@ -72,11 +72,17 @@ With byte positions the [Endianness](https://en.wikipedia.org/wiki/Endianness) o
 
 The current implementation assumes a **Little Endian** system.
 
+&nbsp;
+
+## De Bruijn Sequence
+
 On C++11/14/17 for a generic solution without using compiler built-in functions, [De Bruijn sequence](https://en.wikipedia.org/wiki/De_Bruijn_sequence) **B(2,6)** may be used with preprocessor directive **DE_BRUIJN_SEQUENCE**.
 
 According to a few benchmark runs De Bruijn sequence performs only slightly less than the built-in function.
 
 **DE_BRUIJN_SEQUENCE** declaration may be enabled on [CMakeVersion.txt](./src/CMakeVersion.txt).
+
+The De Bruijn sequence table has been taken from [The Chess Programming Wiki](https://www.chessprogramming.org/BitScan#DeBruijnMultiplation).
 
 &nbsp;
 

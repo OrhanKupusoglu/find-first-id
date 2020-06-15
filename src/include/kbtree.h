@@ -23,6 +23,10 @@ namespace kupid {
      * De Bruijn sequence
      * see:
      *      https://en.wikipedia.org/wiki/De_Bruijn_sequence
+     *
+     * De Bruijn multiplication
+     * see:
+     *      https://www.chessprogramming.org/BitScan#DeBruijnMultiplation
      */
 
     class kbtree {
@@ -192,13 +196,17 @@ namespace kupid {
                 return __builtin_ffsll(~bits) - 1;
     #else
                 static const std::array<uint8_t, 64> de_bruijn_64 = {
-                     0,  1,  2, 53,  3,  7,  54, 27,  4, 38, 41, 8, 34, 55, 48, 28,
-                    62,  5, 39, 46, 44, 42, 22,  9, 24, 35, 59, 56, 49, 18, 29, 11,
-                    63, 52,  6, 26, 37, 40, 33, 47, 61, 45, 43, 21, 23, 58, 17, 10,
-                    51, 25, 36, 32, 60, 20, 57, 16, 50, 31, 19, 15, 30, 14, 13, 12
+                     0,  1, 48,  2, 57, 49, 28,  3,
+                    61, 58, 50, 42, 38, 29, 17,  4,
+                    62, 55, 59, 36, 53, 51, 43, 22,
+                    45, 39, 33, 30, 24, 18, 12,  5,
+                    63, 47, 56, 27, 60, 41, 37, 16,
+                    54, 35, 52, 21, 44, 32, 23, 11,
+                    46, 26, 40, 15, 34, 20, 31, 10,
+                    25, 14, 19,  9, 13,  8,  7,  6
                 };
 
-                static const uint64_t de_bruijn_magic = 0x022FDD63CC95386D;
+                static const uint64_t de_bruijn_magic = 0x03F79D71B4CB0A89;
 
                 bits  = ~bits;
                 bits &= -bits;
