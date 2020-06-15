@@ -19,6 +19,10 @@ namespace kupid {
      * 6.59 Other Built-in Functions Provided by GCC
      * see:
      *      https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
+     *
+     * De Bruijn sequence
+     * see:
+     *      https://en.wikipedia.org/wiki/De_Bruijn_sequence
      */
 
     class kbtree {
@@ -187,21 +191,21 @@ namespace kupid {
     #ifndef DE_BRUIJN_SEQUENCE
                 return __builtin_ffsll(~bits) - 1;
     #else
-                static const std::array<uint8_t, 64> debruijn_64 = {
+                static const std::array<uint8_t, 64> de_bruijn_64 = {
                      0,  1,  2, 53,  3,  7,  54, 27,  4, 38, 41, 8, 34, 55, 48, 28,
                     62,  5, 39, 46, 44, 42, 22,  9, 24, 35, 59, 56, 49, 18, 29, 11,
                     63, 52,  6, 26, 37, 40, 33, 47, 61, 45, 43, 21, 23, 58, 17, 10,
                     51, 25, 36, 32, 60, 20, 57, 16, 50, 31, 19, 15, 30, 14, 13, 12
                 };
 
-                static const uint64_t debruijn_magic = 0x022FDD63CC95386D;
+                static const uint64_t de_bruijn_magic = 0x022FDD63CC95386D;
 
                 bits  = ~bits;
                 bits &= -bits;
-                bits *=  debruijn_magic;
+                bits *=  de_bruijn_magic;
                 uint8_t v = bits >> 58;
 
-                return debruijn_64[v];
+                return de_bruijn_64[v];
     #endif
 #endif
             }
