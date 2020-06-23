@@ -161,7 +161,7 @@ namespace kupid {
             }
 
             static inline bool is_bit_on(uint64_t bits, uint64_t i) {
-                return (bits & (1ULL << i)) > 0;
+                return (bits & get_on_64_bit(i)) > 0;
             }
 
             static inline void set_bit_on(uint64_t& bits, uint8_t i) {
