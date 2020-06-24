@@ -160,7 +160,7 @@ namespace kupid {
                 return dm.mod > 0 ? dm.div + 1 : dm.div;
             }
 
-            static inline bool is_bit_on(uint64_t bits, uint64_t i) {
+            static inline bool is_bit_on(uint64_t bits, uint8_t i) {
                 return (bits & get_on_64_bit(i)) > 0;
             }
 
