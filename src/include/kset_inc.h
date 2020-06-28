@@ -1,5 +1,5 @@
-#ifndef KSET_H
-#define KSET_H
+#ifndef KSET_INCREASING_H
+#define KSET_INCREASING_H
 
 #include <set>
 #include <algorithm>
@@ -7,18 +7,21 @@
 
 namespace kupid {
     /**
+     * keep track of used IDs
+     * start with none used, and add used IDs: set is increasing
+     *
      * std::set
      * see:
      *      https://en.cppreference.com/w/cpp/container/set
      */
 
-    class kset {
+    class kset_inc {
         public:
-            kset(uint32_t size)
+            kset_inc(uint32_t size)
                 : _size{size}
             {}
 
-            kset() = delete;
+            kset_inc() = delete;
 
             int64_t get_id(bool is_using = true) {
                 uint32_t id;

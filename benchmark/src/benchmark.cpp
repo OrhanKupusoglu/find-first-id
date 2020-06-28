@@ -3,8 +3,9 @@
 
 #include "../../src/include/kbset.h"
 #include "../../src/include/kbtree.h"
-#include "../../src/include/kset.h"
 #include "../../src/include/kvector.h"
+#include "../../src/include/kset_inc.h"
+#include "../../src/include/kset_dec.h"
 
 // passed as a define, for example: -DBMARK_TEST_SIZE=1048576
 constexpr uint32_t bmark_test_size = BMARK_TEST_SIZE;
@@ -50,44 +51,6 @@ static void benchmark_kbtree(benchmark::State& state) {
 }
 
 // -----------------------------------------------------------------------------
-// kupid::kvector
-
-static kupid::kvector prep_kvector() {
-    kupid::kvector id_factory{bmark_test_size};
-
-    for (uint32_t i = 0; i < bmark_test_size; ++i) {
-        id_factory.use_id(i);
-    }
-
-    id_factory.free_id(bmark_last_id);
-
-    return id_factory;
-}
-
-static void print_kvector(kupid::kvector& id_factory) {
-    auto id = id_factory.get_id(false);
-
-    std::string name_size{"++ kupid::kvector{"};
-    name_size += std::to_string(bmark_test_size);
-    name_size += "}";
-
-    std::cout.width(bmark_print_width);
-    std::cout << std::left << name_size << " : get_id() = " << id << '\n';
-}
-
-static void test_kvector(kupid::kvector& id_factory) {
-    uint32_t id;
-    benchmark::DoNotOptimize(id = id_factory.get_id(false));
-}
-
-static void benchmark_kvector(benchmark::State& state) {
-    auto id_factory = prep_kvector();
-    for (auto _ : state) {
-        test_kvector(id_factory);
-    }
-}
-
-// -----------------------------------------------------------------------------
 // kupid::kbset<size>
 
 static kupid::kbset<bmark_test_size> prep_kbset() {
@@ -126,10 +89,10 @@ static void benchmark_kbset(benchmark::State& state) {
 }
 
 // -----------------------------------------------------------------------------
-// kupid::kset
+// kupid::kvector
 
-static kupid::kset prep_kset() {
-    kupid::kset id_factory{bmark_test_size};
+static kupid::kvector prep_kvector() {
+    kupid::kvector id_factory{bmark_test_size};
 
     for (uint32_t i = 0; i < bmark_test_size; ++i) {
         id_factory.use_id(i);
@@ -140,10 +103,10 @@ static kupid::kset prep_kset() {
     return id_factory;
 }
 
-static void print_kset(kupid::kset& id_factory) {
+static void print_kvector(kupid::kvector& id_factory) {
     auto id = id_factory.get_id(false);
 
-    std::string name_size{"++ kupid::kset{"};
+    std::string name_size{"++ kupid::kvector{"};
     name_size += std::to_string(bmark_test_size);
     name_size += "}";
 
@@ -151,15 +114,91 @@ static void print_kset(kupid::kset& id_factory) {
     std::cout << std::left << name_size << " : get_id() = " << id << '\n';
 }
 
-static void test_kset(kupid::kset& id_factory) {
+static void test_kvector(kupid::kvector& id_factory) {
     uint32_t id;
     benchmark::DoNotOptimize(id = id_factory.get_id(false));
 }
 
-static void benchmark_kset(benchmark::State& state) {
-    auto id_factory = prep_kset();
+static void benchmark_kvector(benchmark::State& state) {
+    auto id_factory = prep_kvector();
     for (auto _ : state) {
-        test_kset(id_factory);
+        test_kvector(id_factory);
+    }
+}
+
+// -----------------------------------------------------------------------------
+// kupid::kset_inc
+
+static kupid::kset_inc prep_kset_inc() {
+    kupid::kset_inc id_factory{bmark_test_size};
+
+    for (uint32_t i = 0; i < bmark_test_size; ++i) {
+        id_factory.use_id(i);
+    }
+
+    id_factory.free_id(bmark_last_id);
+
+    return id_factory;
+}
+
+static void print_kset_inc(kupid::kset_inc& id_factory) {
+    auto id = id_factory.get_id(false);
+
+    std::string name_size{"++ kupid::kset_inc{"};
+    name_size += std::to_string(bmark_test_size);
+    name_size += "}";
+
+    std::cout.width(bmark_print_width);
+    std::cout << std::left << name_size << " : get_id() = " << id << '\n';
+}
+
+static void test_kset_inc(kupid::kset_inc& id_factory) {
+    uint32_t id;
+    benchmark::DoNotOptimize(id = id_factory.get_id(false));
+}
+
+static void benchmark_kset_inc(benchmark::State& state) {
+    auto id_factory = prep_kset_inc();
+    for (auto _ : state) {
+        test_kset_inc(id_factory);
+    }
+}
+
+// -----------------------------------------------------------------------------
+// kupid::kset_dec
+
+static kupid::kset_dec prep_kset_dec() {
+    kupid::kset_dec id_factory{bmark_test_size};
+
+    for (uint32_t i = 0; i < bmark_test_size; ++i) {
+        id_factory.use_id(i);
+    }
+
+    id_factory.free_id(bmark_last_id);
+
+    return id_factory;
+}
+
+static void print_kset_dec(kupid::kset_dec& id_factory) {
+    auto id = id_factory.get_id(false);
+
+    std::string name_size{"++ kupid::kset_dec{"};
+    name_size += std::to_string(bmark_test_size);
+    name_size += "}";
+
+    std::cout.width(bmark_print_width);
+    std::cout << std::left << name_size << " : get_id() = " << id << '\n';
+}
+
+static void test_kset_dec(kupid::kset_dec& id_factory) {
+    uint32_t id;
+    benchmark::DoNotOptimize(id = id_factory.get_id(false));
+}
+
+static void benchmark_kset_dec(benchmark::State& state) {
+    auto id_factory = prep_kset_dec();
+    for (auto _ : state) {
+        test_kset_dec(id_factory);
     }
 }
 
@@ -176,8 +215,11 @@ static void print_ids() {
     auto bmark_kbset = prep_kbset();
     print_kbset(bmark_kbset);
 
-    auto bmark_kset = prep_kset();
-    print_kset(bmark_kset);
+    auto bmark_kset_inc = prep_kset_inc();
+    print_kset_inc(bmark_kset_inc);
+
+    auto bmark_kset_dec = prep_kset_dec();
+    print_kset_dec(bmark_kset_dec);
 
     std::cout << "------------------------------------------------------------\n";
 }
@@ -189,12 +231,14 @@ static void print_ids() {
 BENCHMARK(benchmark_kbtree)->Unit(benchmark::kMillisecond);
 BENCHMARK(benchmark_kvector)->Unit(benchmark::kMillisecond);
 BENCHMARK(benchmark_kbset)->Unit(benchmark::kMillisecond);
-BENCHMARK(benchmark_kset)->Unit(benchmark::kMillisecond);
+BENCHMARK(benchmark_kset_inc)->Unit(benchmark::kMillisecond);
+BENCHMARK(benchmark_kset_dec)->Unit(benchmark::kMillisecond);
 #else
 BENCHMARK(benchmark_kbtree);
 BENCHMARK(benchmark_kvector);
 BENCHMARK(benchmark_kbset);
-BENCHMARK(benchmark_kset);
+BENCHMARK(benchmark_kset_inc);
+BENCHMARK(benchmark_kset_dec);
 #endif
 
 // run the benchmark

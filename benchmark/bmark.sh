@@ -19,7 +19,7 @@ ARG1=$1
 HELP=${ARG1: -2}
 
 # default arg
-DEF_TEST_DIR='.'
+DEF_TEST_DIR='runs'
 DEF_TEST_FORMAT='json'
 
 if [[ $HELP == "-h" ]]
