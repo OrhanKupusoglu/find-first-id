@@ -1,25 +1,25 @@
 #include "gtest/gtest.h"
 #include "../include/krandom.h"
-#include "../../src/include/kset_dec.h"
+#include "../../src/include/kset_inc.h"
 
-TEST(TestKSet, SizeZero) {
+TEST(TestKSetInc, SizeZero) {
     uint32_t size = 0;
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
 
     auto id = id_factory.get_id();
     std::cout << "#1. id = " << id << '\n';
     ASSERT_EQ(id, -1);
 }
 
-TEST(TestKSet, SizeOne) {
+TEST(TestKSetInc, SizeOne) {
     uint32_t size = 1;
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
 
     auto id = id_factory.get_id(false);
     std::cout << "#1. id = " << id << " - not marked as used\n";
@@ -34,12 +34,12 @@ TEST(TestKSet, SizeOne) {
     ASSERT_EQ(id, -1);
 }
 
-TEST(TestKSet, SizeTwo) {
+TEST(TestKSetInc, SizeTwo) {
     uint32_t size = 2;
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
 
     auto id = id_factory.get_id();
     std::cout << "#1. id = " << id << '\n';
@@ -54,12 +54,12 @@ TEST(TestKSet, SizeTwo) {
     ASSERT_EQ(id, -1);
 }
 
-TEST(TestKSet, ClearUseHalf) {
+TEST(TestKSetInc, ClearUseHalf) {
     uint32_t size = 1 * 1024;
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
 
     ASSERT_EQ(id_factory.size(), size);
 
@@ -94,12 +94,12 @@ TEST(TestKSet, ClearUseHalf) {
     ASSERT_EQ(id, mid);
 }
 
-TEST(TestKSet, SizeSmall) {
+TEST(TestKSetInc, SizeSmall) {
     uint32_t size = 1 * 1024;
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
 
     ASSERT_EQ(id_factory.size(), size);
 
@@ -146,12 +146,12 @@ TEST(TestKSet, SizeSmall) {
     ASSERT_TRUE(id_factory.is_using(size - 1));
 }
 
-TEST(TestKSet, SizeMedium) {
+TEST(TestKSetInc, SizeMedium) {
     uint32_t size = 64 * 1024;
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
 
     ASSERT_EQ(id_factory.size(), size);
 
@@ -198,12 +198,12 @@ TEST(TestKSet, SizeMedium) {
     ASSERT_TRUE(id_factory.is_using(size - 1));
 }
 
-TEST(TestKSet, SizeLarge) {
+TEST(TestKSetInc, SizeLarge) {
     uint32_t size = 1024 * 1024;
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
 
     ASSERT_EQ(id_factory.size(), size);
 
@@ -252,12 +252,12 @@ TEST(TestKSet, SizeLarge) {
 }
 
 #ifdef TEST_XLARGE
-TEST(TestKSet, SizeXLarge) {
+TEST(TestKSetInc, SizeXLarge) {
     uint32_t size = 16 * 1024 * 1024;
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
 
     ASSERT_EQ(id_factory.size(), size);
 
@@ -306,14 +306,14 @@ TEST(TestKSet, SizeXLarge) {
 }
 #endif
 
-TEST(TestKSet, RandomUnordered) {
+TEST(TestKSetInc, RandomUnordered) {
     uint32_t size = 1024 * 1024;
     int rnd_size = 10;
     int j = 0;
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
     kupid::krandom_int rnd_factory{size};
 
     ASSERT_EQ(id_factory.size(), size);
@@ -337,14 +337,14 @@ TEST(TestKSet, RandomUnordered) {
     }
 }
 
-TEST(TestKSet, RandomOrdered) {
+TEST(TestKSetInc, RandomOrdered) {
     uint32_t size = 1024 * 1024;
     int rnd_size = 10;
     std::set<uint32_t> rnd_set{};
 
-    std::cout << "test kupid::kset with size = " << size << '\n';
+    std::cout << "test kupid::kset_inc with size = " << size << '\n';
 
-    kupid::kset id_factory{size};
+    kupid::kset_inc id_factory{size};
     kupid::krandom_int rnd_factory{size};
 
     ASSERT_EQ(id_factory.size(), size);

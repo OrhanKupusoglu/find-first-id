@@ -28,7 +28,11 @@ Bits are a logical way to store on and off data, therefore std::vector's [boolea
 
 N is a template non-type parameter for std::bitset, therefore this is a constraint on the use of std::bitset.
 
-Ordered sets, [std::set](https://en.cppreference.com/w/cpp/container/set), provide an elegant, but relatively slow solution.
+Ordered sets, [std::set](https://en.cppreference.com/w/cpp/container/set), provide two elegant solutions:
+- keep track of used IDs, i.e. set is increasing
+- keep track of available IDs, i.e. set is decreasing
+
+As we will see during the benchmarks, this choice has a huge impact on the performance of this solution.
 
 &nbsp;
 
@@ -173,6 +177,8 @@ The four classes, [kupid::kbtree](./src/include/kbtree.h) and the other three co
 A shell script runs [CMake](https://cmake.org/), and then makes the sample application **kupid**.
 
 ```
+$ cd src/
+
 $ ./build.sh
 -- The CXX compiler identification is GNU 7.5.0
 -- Check for working CXX compiler: /usr/bin/c++
@@ -181,14 +187,14 @@ $ ./build.sh
 -- Detecting CXX compiler ABI info - done
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
-++ Compile definitions: KUPID_VERSION="0.1.1"
+++ Compile definitions: KUPID_VERSION="0.2.1"
 ++ CMake build type: Release
 ++ C++ standard: 14
 ++ C++ flags: -O3 -DNDEBUG
 ++ will use __builtin_ffsll(x) to find the first zero bit
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/src/build
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/temp/find-first-id/src/build
 
 Scanning dependencies of target kupid
 [ 50%] Building CXX object CMakeFiles/kupid.dir/src/main.cpp.o
@@ -196,7 +202,7 @@ Scanning dependencies of target kupid
 [100%] Built target kupid
 
 ++ successfully built:
-kupid - 28848 bytes
+kupid - 28968 bytes
 
 $ ./kupid help
 usage:
@@ -232,7 +238,16 @@ get_id() = -1
 ++ cleared
 get_id() = 0
 
-kupid::kset
+kupid::kset_inc
+------------------------------------------------------------
+++ size = 8192 : all used
+++ last id is freed
+get_id() = 8191
+get_id() = -1
+++ cleared
+get_id() = 0
+
+kupid::kset_dec
 ------------------------------------------------------------
 ++ size = 8192 : all used
 ++ last id is freed
@@ -272,7 +287,7 @@ $ ./build.sh
 -- Detecting CXX compiler ABI info - done
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
-++ Compile definitions: KUPID_VERSION="0.1.1"
+++ Compile definitions: KUPID_VERSION="0.2.1"
 ++ CMake build type: Release
 ++ C++ standard: 14
 ++ C++ flags: -O3 -DNDEBUG
@@ -280,19 +295,20 @@ $ ./build.sh
 -- Found GTest: /usr/lib/libgtest.a
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/test/build
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/temp/find-first-id/test/build
 
 Scanning dependencies of target test-kupid
-[ 16%] Building CXX object CMakeFiles/test-kupid.dir/src/main.cpp.o
-[ 33%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kbtree.cpp.o
-[ 50%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kbset.cpp.o
-[ 66%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kset.cpp.o
-[ 83%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kvector.cpp.o
+[ 14%] Building CXX object CMakeFiles/test-kupid.dir/src/main.cpp.o
+[ 28%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kbtree.cpp.o
+[ 42%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kbset.cpp.o
+[ 57%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kvector.cpp.o
+[ 71%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kset_inc.cpp.o
+[ 85%] Building CXX object CMakeFiles/test-kupid.dir/src/test_kset_dec.cpp.o
 [100%] Linking CXX executable ../test-kupid
 [100%] Built target test-kupid
 
 ++ successfully built:
-test-kupid - 992552 bytes
+test-kupid - 1053840 bytes
 
 ++ list of tests:
 TestKBTree.
@@ -325,7 +341,7 @@ TestKBSet.
   SizeLarge
   RandomUnordered
   RandomOrdered
-TestKSet.
+TestKVector.
   SizeZero
   SizeOne
   SizeTwo
@@ -335,7 +351,17 @@ TestKSet.
   SizeLarge
   RandomUnordered
   RandomOrdered
-TestKVector.
+TestKSetInc.
+  SizeZero
+  SizeOne
+  SizeTwo
+  ClearUseHalf
+  SizeSmall
+  SizeMedium
+  SizeLarge
+  RandomUnordered
+  RandomOrdered
+TestKSetDec.
   SizeZero
   SizeOne
   SizeTwo
@@ -349,8 +375,8 @@ TestKVector.
 $ ./test-kupid
 ...
 [----------] Global test environment tear-down
-[==========] 46 tests from 4 test cases ran. (1653 ms total)
-[  PASSED  ] 46 tests.
+[==========] 55 tests from 5 test cases ran. (2991 ms total)
+[  PASSED  ] 55 tests.
 
 ## list tests
 $ ./test-kupid --gtest_list_tests
@@ -359,7 +385,7 @@ $ ./test-kupid --gtest_list_tests
 $ ./test-kupid --gtest_filter=TestKBTree.BTree*
 ...
 [----------] Global test environment tear-down
-[==========] 10 tests from 1 test case ran. (54 ms total)
+[==========] 10 tests from 1 test case ran. (3 ms total)
 [  PASSED  ] 10 tests.
 ```
 
@@ -380,14 +406,14 @@ $ ./build.sh
 -- Detecting CXX compiler ABI info - done
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
-++ Compile definitions: KUPID_VERSION="0.1.1";BMARK_TEST_SIZE=8192
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=8192
 ++ CMake build type: Release
 ++ C++ standard: 14
 ++ C++ flags: -O3 -DNDEBUG
 ++ will use __builtin_ffsll(x) to find the first zero bit
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/temp/find-first-id/benchmark/build
 
 Scanning dependencies of target bmark-kupid
 [ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
@@ -395,11 +421,9 @@ Scanning dependencies of target bmark-kupid
 [100%] Built target bmark-kupid
 
 ++ successfully built:
-bmark-kupid - 1218880 bytes
+bmark-kupid - 1219000 bytes
 
 ++ test size: 8192
-
-$ ./bmark-kupid
 ```
 
 In the current Linux system two warnings are displayed:
@@ -418,7 +442,7 @@ usage:
 
         test output files in 'test_format' will be saved into 'test_dir'
 
-        default test_dir is '.', test_dir is created first
+        default test_dir is 'runs', test_dir is created first
         default test_format is 'json', options are 'json|csv'
         runs benchmark with the given test sizes:
                 8192
@@ -439,25 +463,26 @@ $ ./loop.sh -h
 
 ## Results
 
-Benchmark results indicate that among the four classes the one using the ffs bit operations, **kupid::kbtree**, are faster than the others.
-The difference grows as N goes to UINT32_MAX.
+Benchmark results indicate that among the five classes the one using the std::set with decreasing size (start with all IDs as available, and remove used IDs), **kupid::kset_dec**, are faster than the others.
 
-The price is higher memory consumption due to position-indicating layers in addition to a more complex class.
+But there is an important caveat, **kupid::kset_dec** is slow to start.
 
-The Big-O analysis indicates that, in the worst case (only last ID is available, N-1), these algorithm is O(1):
+**kupid::kbtree**, are faster than the three other classes. The difference grows as N goes to UINT32_MAX. The price is higher memory consumption due to position-indicating layers in addition to a more complex class.
 
-* Since the bit operations are O(1), a couple of calls make **n x O(1)**, therefore the algorithm is of **O(1)** complexity.
+The Big-O analysis indicates that, in the worst case (only last ID is available, N-1), **kupid::kbtree** algorithm is O(1):
+Since the bit operations are O(1), a couple of calls make n x O(1), therefore the algorithm is of O(1) complexity.
 
-Google Benchmark outputs proves that conclusion.
+Google Benchmark outputs prove that conclusion.
 
 Results of the sample run below are presented in a table:
 
 |Size<br>Class|8182<br>Time [ns]|16384<br>Time [ns]|32768<br>Time [ns]|65536<br>Time [ns]|131072<br>Time [ns]|1048576<br>Time [ns]|8388608<br>Time [ns]|16777216<br>Time [ns]|
 |-----|--------:|---------:|--------:|---------:|--------:|---------:|--------:|---------:|
-|kupid::kbtree|4.66|4.74|6.00|3.27|3.93|5.40|5.15|6.01|
-|kupid::kvector|6,955.00|13,995.00|28,090.00|56,297.00|103,145.00|879,168.00|6,712,895.00|13,383,140.00|
-|kupid::kbset|6,354.00|12,800.00|25,591.00|51,435.00|102,422.00|817,514.00|6,537,404.00|12,982,684.00|
-|kupid::kset|85,208.00|169,433.00|363,521.00|848,111.00|2,955,843.00|47,941,305.00|390,132,506.00|745,136,304.00|
+|kupid::kbtree|4.680|4.850|4.790|3.280|3.930|5.070|5.150|5.990|
+|kupid::kvector|7,286.000|14,295.000|26,569.000|58,238.000|114,480.000|884,082.000|6,898,665.000|13,801,442.000|
+|kupid::kbset|6,515.000|12,817.000|25,761.000|51,947.000|113,747.000|828,851.000|6,946,567.000|13,107,339.000|
+|kupid::kset_inc|92,832.000|178,274.000|470,255.000|1,065,752.000|3,580,655.000|53,419,528.000|486,773,676.000|790,978,144.000|
+|kupid::kset_dec|0.524|0.545|0.519|0.261|0.261|0.258|0.279|0.306|
 
 All benchmarks are ran on a notebook with the given specification:
 
@@ -497,116 +522,144 @@ The sample benchmark's output:
 ```
 $ ./bmark.sh
 ## simplified output ...
+$ ./bmark.sh
+================================================================================
+BENCHMARK SIZES:
+        8192
+        16384
+        32768
+        65536
+        131072
+        1048576
+        8388608
+        16777216
 ================================================================================
 ++ test size: 8192
 ================================================================================
 ++ kupid::kbtree{8192}       : get_id() = 8191
 ++ kupid::kvector{8192}      : get_id() = 8191
 ++ kupid::kbset<8192>        : get_id() = 8191
-++ kupid::kset{8192}         : get_id() = 8191
+++ kupid::kset_inc{8192}     : get_id() = 8191
+++ kupid::kset_dec{8192}     : get_id() = 8191
 ------------------------------------------------------------
-Benchmark                  Time             CPU   Iterations
-------------------------------------------------------------
-benchmark_kbtree        4.66 ns         4.66 ns    148776423
-benchmark_kvector       6955 ns         6956 ns        80590
-benchmark_kbset         6354 ns         6354 ns       104761
-benchmark_kset         85208 ns        85211 ns         7605
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         4.68 ns         4.68 ns    161251740
+benchmark_kvector        7286 ns         7286 ns       100516
+benchmark_kbset          6515 ns         6514 ns       102851
+benchmark_kset_inc      92832 ns        92830 ns         6536
+benchmark_kset_dec      0.524 ns        0.522 ns   1000000000
 ================================================================================
 ++ test size: 16384
 ================================================================================
 ++ kupid::kbtree{16384}      : get_id() = 16383
 ++ kupid::kvector{16384}     : get_id() = 16383
 ++ kupid::kbset<16384>       : get_id() = 16383
-++ kupid::kset{16384}        : get_id() = 16383
+++ kupid::kset_inc{16384}    : get_id() = 16383
+++ kupid::kset_dec{16384}    : get_id() = 16383
 ------------------------------------------------------------
-Benchmark                  Time             CPU   Iterations
-------------------------------------------------------------
-benchmark_kbtree        4.74 ns         4.74 ns    114872730
-benchmark_kvector      13995 ns        13977 ns        53615
-benchmark_kbset        12800 ns        12800 ns        44779
-benchmark_kset        169433 ns       169440 ns         3206
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         4.85 ns         4.83 ns    139878775
+benchmark_kvector       14295 ns        14294 ns        53125
+benchmark_kbset         12817 ns        12816 ns        52559
+benchmark_kset_inc     178274 ns       178267 ns         3434
+benchmark_kset_dec      0.545 ns        0.545 ns   1000000000
 ================================================================================
 ++ test size: 32768
 ================================================================================
 ++ kupid::kbtree{32768}      : get_id() = 32767
 ++ kupid::kvector{32768}     : get_id() = 32767
 ++ kupid::kbset<32768>       : get_id() = 32767
-++ kupid::kset{32768}        : get_id() = 32767
+++ kupid::kset_inc{32768}    : get_id() = 32767
+++ kupid::kset_dec{32768}    : get_id() = 32767
 ------------------------------------------------------------
-Benchmark                  Time             CPU   Iterations
-------------------------------------------------------------
-benchmark_kbtree        6.00 ns         5.96 ns    105600599
-benchmark_kvector      28090 ns        28090 ns        26573
-benchmark_kbset        25591 ns        25592 ns        26592
-benchmark_kset        363521 ns       363528 ns         1772
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         4.79 ns         4.78 ns    158446331
+benchmark_kvector       26569 ns        26555 ns        25923
+benchmark_kbset         25761 ns        25759 ns        27475
+benchmark_kset_inc     470255 ns       469809 ns         1138
+benchmark_kset_dec      0.519 ns        0.519 ns   1000000000
 ================================================================================
 ++ test size: 65536
 ================================================================================
 ++ kupid::kbtree{65536}      : get_id() = 65535
 ++ kupid::kvector{65536}     : get_id() = 65535
 ++ kupid::kbset<65536>       : get_id() = 65535
-++ kupid::kset{65536}        : get_id() = 65535
-------------------------------------------------------------
-Benchmark                  Time             CPU   Iterations
-------------------------------------------------------------
-benchmark_kbtree        3.27 ns         3.27 ns    182498035
-benchmark_kvector      56297 ns        56299 ns        11250
-benchmark_kbset        51435 ns        51416 ns        11225
-benchmark_kset        848111 ns       848134 ns          761
+++ kupid::kset_inc{65536}    : get_id() = 65535
+++ kupid::kset_dec{65536}    : get_id() = 65535
+-------------------------------------------------------------
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         3.28 ns         3.27 ns    203576984
+benchmark_kvector       58238 ns        57848 ns        12396
+benchmark_kbset         51947 ns        51902 ns        12336
+benchmark_kset_inc    1065752 ns      1064412 ns          837
+benchmark_kset_dec      0.261 ns        0.261 ns   1000000000
 ================================================================================
 ++ test size: 131072
 ================================================================================
 ++ kupid::kbtree{131072}     : get_id() = 131071
 ++ kupid::kvector{131072}    : get_id() = 131071
 ++ kupid::kbset<131072>      : get_id() = 131071
-++ kupid::kset{131072}       : get_id() = 131071
+++ kupid::kset_inc{131072}   : get_id() = 131071
+++ kupid::kset_dec{131072}   : get_id() = 131071
 ------------------------------------------------------------
-Benchmark                  Time             CPU   Iterations
-------------------------------------------------------------
-benchmark_kbtree        3.93 ns         3.92 ns    151587737
-benchmark_kvector     103145 ns       103104 ns         6224
-benchmark_kbset       102422 ns       102269 ns         6611
-benchmark_kset       2955843 ns      2955400 ns          230
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         3.93 ns         3.93 ns    134032311
+benchmark_kvector      114480 ns       113726 ns         6046
+benchmark_kbset        113747 ns       113326 ns         6513
+benchmark_kset_inc    3580655 ns      3578563 ns          178
+benchmark_kset_dec      0.261 ns        0.260 ns   1000000000
 ================================================================================
 ++ test size: 1048576
 ================================================================================
 ++ kupid::kbtree{1048576}    : get_id() = 1048575
 ++ kupid::kvector{1048576}   : get_id() = 1048575
 ++ kupid::kbset<1048576>     : get_id() = 1048575
-++ kupid::kset{1048576}      : get_id() = 1048575
-------------------------------------------------------------
-Benchmark                  Time             CPU   Iterations
-------------------------------------------------------------
-benchmark_kbtree        5.40 ns         5.40 ns    101064966
-benchmark_kvector     879168 ns       879198 ns          671
-benchmark_kbset       817514 ns       817533 ns          799
-benchmark_kset      47941305 ns     47942421 ns           23
+++ kupid::kset_inc{1048576}  : get_id() = 1048575
+++ kupid::kset_dec{1048576}  : get_id() = 1048575
+-------------------------------------------------------------
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         5.07 ns         5.07 ns    118175436
+benchmark_kvector      884082 ns       883389 ns          803
+benchmark_kbset        828851 ns       828812 ns          826
+benchmark_kset_inc   53419528 ns     53366729 ns           10
+benchmark_kset_dec      0.258 ns        0.258 ns   1000000000
 ================================================================================
 ++ test size: 8388608
 ================================================================================
 ++ kupid::kbtree{8388608}    : get_id() = 8388607
 ++ kupid::kvector{8388608}   : get_id() = 8388607
 ++ kupid::kbset<8388608>     : get_id() = 8388607
-++ kupid::kset{8388608}      : get_id() = 8388607
+++ kupid::kset_inc{8388608}  : get_id() = 8388607
+++ kupid::kset_dec{8388608}  : get_id() = 8388607
 ------------------------------------------------------------
-Benchmark                  Time             CPU   Iterations
-------------------------------------------------------------
-benchmark_kbtree        5.15 ns         5.15 ns    144452450
-benchmark_kvector    6712895 ns      6710912 ns           88
-benchmark_kbset      6537404 ns      6537477 ns          106
-benchmark_kset     390132506 ns    390139715 ns            2
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         5.15 ns         5.14 ns    148043484
+benchmark_kvector     6898665 ns      6898378 ns          106
+benchmark_kbset       6946567 ns      6941520 ns          106
+benchmark_kset_inc  486773676 ns    486501804 ns            2
+benchmark_kset_dec      0.279 ns        0.279 ns   1000000000
 ================================================================================
 ++ test size: 16777216
 ================================================================================
 ++ kupid::kbtree{16777216}   : get_id() = 16777215
 ++ kupid::kvector{16777216}  : get_id() = 16777215
 ++ kupid::kbset<16777216>    : get_id() = 16777215
-++ kupid::kset{16777216}     : get_id() = 16777215
-Benchmark                  Time             CPU   Iterations
+++ kupid::kset_inc{16777216} : get_id() = 16777215
+++ kupid::kset_dec{16777216} : get_id() = 16777215
 ------------------------------------------------------------
-benchmark_kbtree        6.01 ns         6.00 ns    100680098
-benchmark_kvector   13383140 ns     13377734 ns           49
-benchmark_kbset     12982684 ns     12983105 ns           54
-benchmark_kset     745136304 ns    744643326 ns            1
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         5.99 ns         5.98 ns    122400495
+benchmark_kvector    13801442 ns     13800551 ns           54
+benchmark_kbset      13107339 ns     13095587 ns           54
+benchmark_kset_inc  790978144 ns    788193226 ns            1
+benchmark_kset_dec      0.306 ns        0.306 ns   1000000000
 ================================================================================
 ```

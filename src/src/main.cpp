@@ -2,8 +2,9 @@
 
 #include "../include/kbtree.h"
 #include "../include/kbset.h"
-#include "../include/kset.h"
 #include "../include/kvector.h"
+#include "../include/kset_inc.h"
+#include "../include/kset_dec.h"
 
 // g++ -std=c++14 -O3 main.cpp -o kupid
 
@@ -115,9 +116,34 @@ int main(int argc, char** argv) {
         std::cout << "get_id() = " << id << '\n';
     }
 
-    std::cout << "\nkupid::kset\n" << line_sep << '\n';
+    std::cout << "\nkupid::kset_inc\n" << line_sep << '\n';
     {
-        kupid::kset id_factory{size};
+        kupid::kset_inc id_factory{size};
+
+        std::cout << "++ size = " << size << " : all used\n";
+
+        for (uint32_t i = 0; i < size; ++i) {
+            id_factory.use_id(i);
+        }
+
+        std::cout << "++ last id is freed\n";
+        id_factory.free_id(last);
+
+        auto id = id_factory.get_id();
+        std::cout << "get_id() = " << id << '\n';
+        id = id_factory.get_id();
+        std::cout << "get_id() = " << id << '\n';
+
+        std::cout << "++ cleared\n";
+        id_factory.clear();
+
+        id = id_factory.get_id();
+        std::cout << "get_id() = " << id << '\n';
+    }
+
+    std::cout << "\nkupid::kset_dec\n" << line_sep << '\n';
+    {
+        kupid::kset_dec id_factory{size};
 
         std::cout << "++ size = " << size << " : all used\n";
 

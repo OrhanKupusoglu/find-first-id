@@ -31,8 +31,9 @@ find_first_id()
 set(SOURCE_FILES "./src/main.cpp"
                  "./src/test_kbtree.cpp"
                  "./src/test_kbset.cpp"
-                 "./src/test_kset.cpp"
-                 "./src/test_kvector.cpp")
+                 "./src/test_kvector.cpp"
+                 "./src/test_kset_inc.cpp"
+                 "./src/test_kset_dec.cpp")
 
 set(TEST_ARGS "")
 
