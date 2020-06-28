@@ -25,11 +25,10 @@ namespace kupid {
             krandom_int(uint32_t size,
                         seed_type type = seed_type::seed_random,
                         uint32_t warm_up = 10000,
-                        uint32_t seed = 787350) {
-                _size = size;
-                _type = type;
-                _warm_up = warm_up;
-
+                        uint32_t seed = 787350) :
+            _size{size},
+            _type{type},
+            _warm_up{warm_up} {
                 switch (_type) {
                     case seed_type::seed_zero:
                         _seed = 0;
