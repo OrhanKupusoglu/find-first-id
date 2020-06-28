@@ -429,6 +429,14 @@ bmark-kupid - 1219000 bytes
 In the current Linux system two warnings are displayed:
 
 ```
+Running ./bmark-kupid
+Run on (4 X 3900 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x2)
+  L1 Instruction 32 KiB (x2)
+  L2 Unified 256 KiB (x2)
+  L3 Unified 4096 KiB (x1)
+Load Average: 2.16, 2.09, 1.99
 ***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
 ***WARNING*** Library was built as DEBUG. Timings may be affected.
 ```
@@ -436,15 +444,15 @@ In the current Linux system two warnings are displayed:
 There are two scripts for test runs.
 
 ```
-$ ./bmark.sh -h
-usage:
-        ./bmark.sh <test_dir> <test_format>
+$ ./bmark.sh <test_dir> <test_format>
 
         test output files in 'test_format' will be saved into 'test_dir'
 
         default test_dir is 'runs', test_dir is created first
         default test_format is 'json', options are 'json|csv'
         runs benchmark with the given test sizes:
+                1024
+                4096
                 8192
                 16384
                 32768
@@ -476,13 +484,13 @@ Google Benchmark outputs prove that conclusion.
 
 Results of the sample run below are presented in a table:
 
-|Size<br>Class|8182<br>Time [ns]|16384<br>Time [ns]|32768<br>Time [ns]|65536<br>Time [ns]|131072<br>Time [ns]|1048576<br>Time [ns]|8388608<br>Time [ns]|16777216<br>Time [ns]|
-|-----|--------:|---------:|--------:|---------:|--------:|---------:|--------:|---------:|
-|kupid::kbtree|4.680|4.850|4.790|3.280|3.930|5.070|5.150|5.990|
-|kupid::kvector|7,286.000|14,295.000|26,569.000|58,238.000|114,480.000|884,082.000|6,898,665.000|13,801,442.000|
-|kupid::kbset|6,515.000|12,817.000|25,761.000|51,947.000|113,747.000|828,851.000|6,946,567.000|13,107,339.000|
-|kupid::kset_inc|92,832.000|178,274.000|470,255.000|1,065,752.000|3,580,655.000|53,419,528.000|486,773,676.000|790,978,144.000|
-|kupid::kset_dec|0.524|0.545|0.519|0.261|0.261|0.258|0.279|0.306|
+|Size<br>Class|1024<br>Time [ns]|4096<br>Time [ns]|8182<br>Time [ns]|16384<br>Time [ns]|32768<br>Time [ns]|65536<br>Time [ns]|131072<br>Time [ns]|1048576<br>Time [ns]|8388608<br>Time [ns]|16777216<br>Time [ns]|
+|-----|--------:|---------:|--------:|---------:|--------:|---------:|--------:|---------:|---------:|---------:|
+|kupid::kbtree|2.870|3.220|4.590|4.430|5.300|3.280|3.780|5.100|4.730|6.270|
+|kupid::kvector|824.000|3,283.000|6,636.000|12,771.000|29,987.000|53,973.000|108,001.000|820,563.000|712,8804.000|14,173,959.000|
+|kupid::kbset|841.000|3,241.000|6,633.000|13,487.000|28,080.000|53,390.000|102,465.000|812,895.000|661,8361.000|13,237,401.000|
+|kupid::kset_inc|11,049.000|46,409.000|91,830.000|180,108.000|525,341.000|975,133.000|3,639,703.000|54,200,376.000|506,977,806.000|895,506,054.000|
+|kupid::kset_dec|0.545|0.518|0.523|0.528|0.524|0.259|0.261|0.260|0.275|0.262|
 
 All benchmarks are ran on a notebook with the given specification:
 
@@ -522,17 +530,38 @@ The sample benchmark's output:
 ```
 $ ./bmark.sh
 ## simplified output ...
-$ ./bmark.sh
 ================================================================================
-BENCHMARK SIZES:
-        8192
-        16384
-        32768
-        65536
-        131072
-        1048576
-        8388608
-        16777216
+++ test size: 1024
+================================================================================
+++ kupid::kbtree{1024}       : get_id() = 1023
+++ kupid::kvector{1024}      : get_id() = 1023
+++ kupid::kbset<1024>        : get_id() = 1023
+++ kupid::kset_inc{1024}     : get_id() = 1023
+++ kupid::kset_dec{1024}     : get_id() = 1023
+------------------------------------------------------------
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         2.87 ns         2.86 ns    265926072
+benchmark_kvector         824 ns          824 ns       833033
+benchmark_kbset           841 ns          841 ns       795868
+benchmark_kset_inc      11049 ns        11044 ns        69642
+benchmark_kset_dec      0.545 ns        0.545 ns   1000000000
+================================================================================
+++ test size: 4096
+================================================================================
+++ kupid::kbtree{4096}       : get_id() = 4095
+++ kupid::kvector{4096}      : get_id() = 4095
+++ kupid::kbset<4096>        : get_id() = 4095
+++ kupid::kset_inc{4096}     : get_id() = 4095
+++ kupid::kset_dec{4096}     : get_id() = 4095
+-------------------------------------------------------------
+Benchmark                   Time             CPU   Iterations
+-------------------------------------------------------------
+benchmark_kbtree         3.22 ns         3.22 ns    207803057
+benchmark_kvector        3283 ns         3283 ns       190683
+benchmark_kbset          3241 ns         3241 ns       212911
+benchmark_kset_inc      46409 ns        46409 ns        15315
+benchmark_kset_dec      0.518 ns        0.518 ns   1000000000
 ================================================================================
 ++ test size: 8192
 ================================================================================
@@ -541,14 +570,13 @@ BENCHMARK SIZES:
 ++ kupid::kbset<8192>        : get_id() = 8191
 ++ kupid::kset_inc{8192}     : get_id() = 8191
 ++ kupid::kset_dec{8192}     : get_id() = 8191
-------------------------------------------------------------
 Benchmark                   Time             CPU   Iterations
 -------------------------------------------------------------
-benchmark_kbtree         4.68 ns         4.68 ns    161251740
-benchmark_kvector        7286 ns         7286 ns       100516
-benchmark_kbset          6515 ns         6514 ns       102851
-benchmark_kset_inc      92832 ns        92830 ns         6536
-benchmark_kset_dec      0.524 ns        0.522 ns   1000000000
+benchmark_kbtree         4.59 ns         4.58 ns    167540845
+benchmark_kvector        6636 ns         6636 ns       106343
+benchmark_kbset          6633 ns         6626 ns       104496
+benchmark_kset_inc      91830 ns        91824 ns         7557
+benchmark_kset_dec      0.523 ns        0.522 ns   1000000000
 ================================================================================
 ++ test size: 16384
 ================================================================================
@@ -560,11 +588,11 @@ benchmark_kset_dec      0.524 ns        0.522 ns   1000000000
 ------------------------------------------------------------
 Benchmark                   Time             CPU   Iterations
 -------------------------------------------------------------
-benchmark_kbtree         4.85 ns         4.83 ns    139878775
-benchmark_kvector       14295 ns        14294 ns        53125
-benchmark_kbset         12817 ns        12816 ns        52559
-benchmark_kset_inc     178274 ns       178267 ns         3434
-benchmark_kset_dec      0.545 ns        0.545 ns   1000000000
+benchmark_kbtree         4.43 ns         4.42 ns    167056217
+benchmark_kvector       12771 ns        12749 ns        54957
+benchmark_kbset         13487 ns        13474 ns        54931
+benchmark_kset_inc     180108 ns       180097 ns         3539
+benchmark_kset_dec      0.528 ns        0.528 ns   1000000000
 ================================================================================
 ++ test size: 32768
 ================================================================================
@@ -576,11 +604,11 @@ benchmark_kset_dec      0.545 ns        0.545 ns   1000000000
 ------------------------------------------------------------
 Benchmark                   Time             CPU   Iterations
 -------------------------------------------------------------
-benchmark_kbtree         4.79 ns         4.78 ns    158446331
-benchmark_kvector       26569 ns        26555 ns        25923
-benchmark_kbset         25761 ns        25759 ns        27475
-benchmark_kset_inc     470255 ns       469809 ns         1138
-benchmark_kset_dec      0.519 ns        0.519 ns   1000000000
+benchmark_kbtree         5.30 ns         5.27 ns    131745462
+benchmark_kvector       29987 ns        29969 ns        25445
+benchmark_kbset         28080 ns        28064 ns        26498
+benchmark_kset_inc     525341 ns       525323 ns         1510
+benchmark_kset_dec      0.524 ns        0.524 ns   1000000000
 ================================================================================
 ++ test size: 65536
 ================================================================================
@@ -592,11 +620,11 @@ benchmark_kset_dec      0.519 ns        0.519 ns   1000000000
 -------------------------------------------------------------
 Benchmark                   Time             CPU   Iterations
 -------------------------------------------------------------
-benchmark_kbtree         3.28 ns         3.27 ns    203576984
-benchmark_kvector       58238 ns        57848 ns        12396
-benchmark_kbset         51947 ns        51902 ns        12336
-benchmark_kset_inc    1065752 ns      1064412 ns          837
-benchmark_kset_dec      0.261 ns        0.261 ns   1000000000
+benchmark_kbtree         3.28 ns         3.28 ns    211851891
+benchmark_kvector       53973 ns        53929 ns        13586
+benchmark_kbset         53390 ns        53389 ns        13607
+benchmark_kset_inc     975133 ns       975037 ns          946
+benchmark_kset_dec      0.259 ns        0.259 ns   1000000000
 ================================================================================
 ++ test size: 131072
 ================================================================================
@@ -608,11 +636,11 @@ benchmark_kset_dec      0.261 ns        0.261 ns   1000000000
 ------------------------------------------------------------
 Benchmark                   Time             CPU   Iterations
 -------------------------------------------------------------
-benchmark_kbtree         3.93 ns         3.93 ns    134032311
-benchmark_kvector      114480 ns       113726 ns         6046
-benchmark_kbset        113747 ns       113326 ns         6513
-benchmark_kset_inc    3580655 ns      3578563 ns          178
-benchmark_kset_dec      0.261 ns        0.260 ns   1000000000
+benchmark_kbtree         3.78 ns         3.77 ns    189071346
+benchmark_kvector      108001 ns       107997 ns         6096
+benchmark_kbset        102465 ns       102385 ns         6761
+benchmark_kset_inc    3639703 ns      3636457 ns          190
+benchmark_kset_dec      0.261 ns        0.261 ns   1000000000
 ================================================================================
 ++ test size: 1048576
 ================================================================================
@@ -624,11 +652,11 @@ benchmark_kset_dec      0.261 ns        0.260 ns   1000000000
 -------------------------------------------------------------
 Benchmark                   Time             CPU   Iterations
 -------------------------------------------------------------
-benchmark_kbtree         5.07 ns         5.07 ns    118175436
-benchmark_kvector      884082 ns       883389 ns          803
-benchmark_kbset        828851 ns       828812 ns          826
-benchmark_kset_inc   53419528 ns     53366729 ns           10
-benchmark_kset_dec      0.258 ns        0.258 ns   1000000000
+benchmark_kbtree         5.10 ns         5.10 ns    100000000
+benchmark_kvector      820563 ns       820529 ns          839
+benchmark_kbset        812895 ns       812189 ns          848
+benchmark_kset_inc   54200376 ns     54191671 ns           10
+benchmark_kset_dec      0.260 ns        0.260 ns   1000000000
 ================================================================================
 ++ test size: 8388608
 ================================================================================
@@ -637,14 +665,14 @@ benchmark_kset_dec      0.258 ns        0.258 ns   1000000000
 ++ kupid::kbset<8388608>     : get_id() = 8388607
 ++ kupid::kset_inc{8388608}  : get_id() = 8388607
 ++ kupid::kset_dec{8388608}  : get_id() = 8388607
-------------------------------------------------------------
+-------------------------------------------------------------
 Benchmark                   Time             CPU   Iterations
 -------------------------------------------------------------
-benchmark_kbtree         5.15 ns         5.14 ns    148043484
-benchmark_kvector     6898665 ns      6898378 ns          106
-benchmark_kbset       6946567 ns      6941520 ns          106
-benchmark_kset_inc  486773676 ns    486501804 ns            2
-benchmark_kset_dec      0.279 ns        0.279 ns   1000000000
+benchmark_kbtree         4.73 ns         4.73 ns    146625039
+benchmark_kvector     7128804 ns      7100775 ns          107
+benchmark_kbset       6618361 ns      6607357 ns          107
+benchmark_kset_inc  506977806 ns    505701830 ns            2
+benchmark_kset_dec      0.275 ns        0.275 ns   1000000000
 ================================================================================
 ++ test size: 16777216
 ================================================================================
@@ -653,13 +681,13 @@ benchmark_kset_dec      0.279 ns        0.279 ns   1000000000
 ++ kupid::kbset<16777216>    : get_id() = 16777215
 ++ kupid::kset_inc{16777216} : get_id() = 16777215
 ++ kupid::kset_dec{16777216} : get_id() = 16777215
-------------------------------------------------------------
+-------------------------------------------------------------
 Benchmark                   Time             CPU   Iterations
 -------------------------------------------------------------
-benchmark_kbtree         5.99 ns         5.98 ns    122400495
-benchmark_kvector    13801442 ns     13800551 ns           54
-benchmark_kbset      13107339 ns     13095587 ns           54
-benchmark_kset_inc  790978144 ns    788193226 ns            1
-benchmark_kset_dec      0.306 ns        0.306 ns   1000000000
+benchmark_kbtree         6.27 ns         6.27 ns    115108478
+benchmark_kvector    14173959 ns     14171426 ns           54
+benchmark_kbset      13237401 ns     13222227 ns           53
+benchmark_kset_inc  895506054 ns    887713218 ns            1
+benchmark_kset_dec      0.262 ns        0.262 ns   1000000000
 ================================================================================
 ```

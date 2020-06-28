@@ -12,6 +12,7 @@ BMARK_EXE=bmark-kupid
 set -x
 
 rm -rf benchmark/build
+rm -rf benchmark/runs
 rm -f benchmark/$BMARK_EXE
 rm -f benchmark/bmark_*.json
 rm -f benchmark/bmark_*.csv
