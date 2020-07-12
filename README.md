@@ -179,7 +179,9 @@ A shell script runs [CMake](https://cmake.org/), and then makes the sample appli
 ```
 $ cd src/
 
-$ ./build.sh
+$ cd ..
+orhanku@orhan-lm19:~/ME/DEV/OK/find-first-id$ cd src/
+orhanku@orhan-lm19:~/ME/DEV/OK/find-first-id/src$ ./build.sh
 -- The CXX compiler identification is GNU 7.5.0
 -- Check for working CXX compiler: /usr/bin/c++
 -- Check for working CXX compiler: /usr/bin/c++ -- works
@@ -194,7 +196,7 @@ $ ./build.sh
 ++ will use __builtin_ffsll(x) to find the first zero bit
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/orhanku/ME/DEV/OK/temp/find-first-id/src/build
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/src/build
 
 Scanning dependencies of target kupid
 [ 50%] Building CXX object CMakeFiles/kupid.dir/src/main.cpp.o
@@ -262,7 +264,7 @@ $ cd ..
 $ ./clean.sh
 ```
 
-This application can also be built with a simple command:
+This application can also be built with a simple command without cmake:
 
 ```
 # cd src/src
@@ -295,7 +297,7 @@ $ ./build.sh
 -- Found GTest: /usr/lib/libgtest.a
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/orhanku/ME/DEV/OK/temp/find-first-id/test/build
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/test/build
 
 Scanning dependencies of target test-kupid
 [ 14%] Building CXX object CMakeFiles/test-kupid.dir/src/main.cpp.o
@@ -375,7 +377,7 @@ TestKSetDec.
 $ ./test-kupid
 ...
 [----------] Global test environment tear-down
-[==========] 55 tests from 5 test cases ran. (2991 ms total)
+[==========] 55 tests from 5 test cases ran. (2398 ms total)
 [  PASSED  ] 55 tests.
 
 ## list tests
@@ -385,7 +387,7 @@ $ ./test-kupid --gtest_list_tests
 $ ./test-kupid --gtest_filter=TestKBTree.BTree*
 ...
 [----------] Global test environment tear-down
-[==========] 10 tests from 1 test case ran. (3 ms total)
+[==========] 10 tests from 1 test case ran. (12 ms total)
 [  PASSED  ] 10 tests.
 ```
 
@@ -413,7 +415,7 @@ $ ./build.sh
 ++ will use __builtin_ffsll(x) to find the first zero bit
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/orhanku/ME/DEV/OK/temp/find-first-id/benchmark/build
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
 
 Scanning dependencies of target bmark-kupid
 [ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
@@ -421,24 +423,28 @@ Scanning dependencies of target bmark-kupid
 [100%] Built target bmark-kupid
 
 ++ successfully built:
-bmark-kupid - 1219000 bytes
+bmark-kupid - 365384 bytes
 
 ++ test size: 8192
 ```
 
-In the current Linux system two warnings are displayed:
+In the current Linux system one warning is displayed:
 
 ```
-Running ./bmark-kupid
+$ ./bmark-kupid
+++ size: 8192 | last id: 8191
+------------------------------------------------------------
 Run on (4 X 3900 MHz CPU s)
-CPU Caches:
-  L1 Data 32 KiB (x2)
-  L1 Instruction 32 KiB (x2)
-  L2 Unified 256 KiB (x2)
-  L3 Unified 4096 KiB (x1)
-Load Average: 2.16, 2.09, 1.99
+2020-07-12 18:52:16
 ***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
-***WARNING*** Library was built as DEBUG. Timings may be affected.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            4 ns          4 ns  203797718
+benchmark_kvector/test_kvector       6415 ns       6415 ns     106702
+benchmark_kbset/test_kbset           7844 ns       7844 ns      91044
+benchmark_kset_inc/kset_inc         91028 ns      91017 ns       6722
+benchmark_kset_dec/kset_dec             1 ns          1 ns  540519537
 ```
 
 There are two scripts for test runs.
@@ -473,9 +479,9 @@ $ ./loop.sh -h
 
 Benchmark results indicate that among the five classes the one using the std::set with decreasing size (start with all IDs as available, and remove used IDs), **kupid::kset_dec**, are faster than the others.
 
-But there is an important caveat, **kupid::kset_dec** is slow to start.
+The success of **kupid::kset_dec** was unexpected.
 
-**kupid::kbtree**, are faster than the three other classes. The difference grows as N goes to UINT32_MAX. The price is higher memory consumption due to position-indicating layers in addition to a more complex class.
+The innovative **kupid::kbtree** is faster than the three other classes. The difference grows as N goes to UINT32_MAX. The price is higher memory consumption due to position-indicating layers in addition to a more complex class.
 
 The Big-O analysis indicates that, in the worst case (only last ID is available, N-1), **kupid::kbtree** algorithm is O(1):
 Since the bit operations are O(1), a couple of calls make n x O(1), therefore the algorithm is of O(1) complexity.
@@ -484,13 +490,13 @@ Google Benchmark outputs prove that conclusion.
 
 Results of the sample run below are presented in a table:
 
-|Size<br>Class|1024<br>Time [ns]|4096<br>Time [ns]|8182<br>Time [ns]|16384<br>Time [ns]|32768<br>Time [ns]|65536<br>Time [ns]|131072<br>Time [ns]|1048576<br>Time [ns]|8388608<br>Time [ns]|16777216<br>Time [ns]|
+|Size<br>Class|1,024=1KB<br>Time [ns]|4,096=4KB<br>Time [ns]|8,182=8KB<br>Time [ns]|16,384=16KB<br>Time [ns]|32,768=32KB<br>Time [ns]|65,536=64KB<br>Time [ns]|131,072=128KB<br>Time [ns]|1,048,576=1MB<br>Time [ns]|8,388,608=8MB<br>Time [ns]|16,777,216=16MB<br>Time [ns]|
 |-----|--------:|---------:|--------:|---------:|--------:|---------:|--------:|---------:|---------:|---------:|
-|kupid::kbtree|2.870|3.220|4.590|4.430|5.300|3.280|3.780|5.100|4.730|6.270|
-|kupid::kvector|824.000|3,283.000|6,636.000|12,771.000|29,987.000|53,973.000|108,001.000|820,563.000|712,8804.000|14,173,959.000|
-|kupid::kbset|841.000|3,241.000|6,633.000|13,487.000|28,080.000|53,390.000|102,465.000|812,895.000|661,8361.000|13,237,401.000|
-|kupid::kset_inc|11,049.000|46,409.000|91,830.000|180,108.000|525,341.000|975,133.000|3,639,703.000|54,200,376.000|506,977,806.000|895,506,054.000|
-|kupid::kset_dec|0.545|0.518|0.523|0.528|0.524|0.259|0.261|0.260|0.275|0.262|
+|kupid::kbtree|3|4|4|3|3|4|3|5|5|6|
+|kupid::kvector|800|3,177|6,358|12,812|25,374|52,259|101,411|811,928|6,562,127|13,015,526|
+|kupid::kbset|1,062|4,238|7,450|14,929|29,561|59,902|118,345|947,592|7,666,896|15,175,448|
+|kupid::kset_inc|8,907|39,698|86,647|183,228|341,079|844,245|3,071,963|38,056,592|507,186,960|511,558,361|
+|kupid::kset_dec|1|1|1|1|1|1|1|1|1|1|
 
 All benchmarks are ran on a notebook with the given specification:
 
@@ -510,7 +516,7 @@ CPU family:          6
 Model:               142
 Model name:          Intel(R) Core(TM) i7-7600U CPU @ 2.80GHz
 Stepping:            9
-CPU MHz:             800.038
+CPU MHz:             800.017
 CPU max MHz:         3900,0000
 CPU min MHz:         400,0000
 BogoMIPS:            5799.77
@@ -520,174 +526,426 @@ L1i cache:           32K
 L2 cache:            256K
 L3 cache:            4096K
 NUMA node0 CPU(s):   0-3
-Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
+Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp md_clear flush_l1d
 ```
 
 &nbsp;
 
-The sample benchmark's output:
+Full output of the benchmark runs given above at the table:
 
 ```
 $ ./bmark.sh
-## simplified output ...
 ================================================================================
+BENCHMARK SIZES:
+	1024
+	4096
+	8192
+	16384
+	32768
+	65536
+	131072
+	1048576
+	8388608
+	16777216
+================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=1024
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365384 bytes
+
 ++ test size: 1024
 ================================================================================
-++ kupid::kbtree{1024}       : get_id() = 1023
-++ kupid::kvector{1024}      : get_id() = 1023
-++ kupid::kbset<1024>        : get_id() = 1023
-++ kupid::kset_inc{1024}     : get_id() = 1023
-++ kupid::kset_dec{1024}     : get_id() = 1023
+++ size: 1024 | last id: 1023
 ------------------------------------------------------------
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         2.87 ns         2.86 ns    265926072
-benchmark_kvector         824 ns          824 ns       833033
-benchmark_kbset           841 ns          841 ns       795868
-benchmark_kset_inc      11049 ns        11044 ns        69642
-benchmark_kset_dec      0.545 ns        0.545 ns   1000000000
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:54:12
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            3 ns          3 ns  260054640
+benchmark_kvector/test_kvector        800 ns        800 ns     851081
+benchmark_kbset/test_kbset           1062 ns       1062 ns     647908
+benchmark_kset_inc/kset_inc          8907 ns       8908 ns      76105
+benchmark_kset_dec/kset_dec             1 ns          1 ns  653927145
 ================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=4096
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365384 bytes
+
 ++ test size: 4096
 ================================================================================
-++ kupid::kbtree{4096}       : get_id() = 4095
-++ kupid::kvector{4096}      : get_id() = 4095
-++ kupid::kbset<4096>        : get_id() = 4095
-++ kupid::kset_inc{4096}     : get_id() = 4095
-++ kupid::kset_dec{4096}     : get_id() = 4095
--------------------------------------------------------------
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         3.22 ns         3.22 ns    207803057
-benchmark_kvector        3283 ns         3283 ns       190683
-benchmark_kbset          3241 ns         3241 ns       212911
-benchmark_kset_inc      46409 ns        46409 ns        15315
-benchmark_kset_dec      0.518 ns        0.518 ns   1000000000
+++ size: 4096 | last id: 4095
+------------------------------------------------------------
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:54:18
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            4 ns          4 ns  202704442
+benchmark_kvector/test_kvector       3177 ns       3177 ns     218700
+benchmark_kbset/test_kbset           4238 ns       4238 ns     165122
+benchmark_kset_inc/kset_inc         39698 ns      39670 ns      17886
+benchmark_kset_dec/kset_dec             1 ns          1 ns  643737622
 ================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=8192
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365384 bytes
+
 ++ test size: 8192
 ================================================================================
-++ kupid::kbtree{8192}       : get_id() = 8191
-++ kupid::kvector{8192}      : get_id() = 8191
-++ kupid::kbset<8192>        : get_id() = 8191
-++ kupid::kset_inc{8192}     : get_id() = 8191
-++ kupid::kset_dec{8192}     : get_id() = 8191
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         4.59 ns         4.58 ns    167540845
-benchmark_kvector        6636 ns         6636 ns       106343
-benchmark_kbset          6633 ns         6626 ns       104496
-benchmark_kset_inc      91830 ns        91824 ns         7557
-benchmark_kset_dec      0.523 ns        0.522 ns   1000000000
+++ size: 8192 | last id: 8191
+------------------------------------------------------------
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:54:24
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            4 ns          4 ns  200934766
+benchmark_kvector/test_kvector       6358 ns       6358 ns     106933
+benchmark_kbset/test_kbset           7450 ns       7450 ns      92179
+benchmark_kset_inc/kset_inc         86647 ns      86649 ns       7620
+benchmark_kset_dec/kset_dec             1 ns          1 ns  544068558
 ================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=16384
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365392 bytes
+
 ++ test size: 16384
 ================================================================================
-++ kupid::kbtree{16384}      : get_id() = 16383
-++ kupid::kvector{16384}     : get_id() = 16383
-++ kupid::kbset<16384>       : get_id() = 16383
-++ kupid::kset_inc{16384}    : get_id() = 16383
-++ kupid::kset_dec{16384}    : get_id() = 16383
+++ size: 16384 | last id: 16383
 ------------------------------------------------------------
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         4.43 ns         4.42 ns    167056217
-benchmark_kvector       12771 ns        12749 ns        54957
-benchmark_kbset         13487 ns        13474 ns        54931
-benchmark_kset_inc     180108 ns       180097 ns         3539
-benchmark_kset_dec      0.528 ns        0.528 ns   1000000000
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:54:30
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            3 ns          3 ns  200201639
+benchmark_kvector/test_kvector      12812 ns      12813 ns      54016
+benchmark_kbset/test_kbset          14929 ns      14930 ns      45880
+benchmark_kset_inc/kset_inc        183228 ns     183225 ns       3776
+benchmark_kset_dec/kset_dec             1 ns          1 ns  534043239
 ================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=32768
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365392 bytes
+
 ++ test size: 32768
 ================================================================================
-++ kupid::kbtree{32768}      : get_id() = 32767
-++ kupid::kvector{32768}     : get_id() = 32767
-++ kupid::kbset<32768>       : get_id() = 32767
-++ kupid::kset_inc{32768}    : get_id() = 32767
-++ kupid::kset_dec{32768}    : get_id() = 32767
+++ size: 32768 | last id: 32767
 ------------------------------------------------------------
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         5.30 ns         5.27 ns    131745462
-benchmark_kvector       29987 ns        29969 ns        25445
-benchmark_kbset         28080 ns        28064 ns        26498
-benchmark_kset_inc     525341 ns       525323 ns         1510
-benchmark_kset_dec      0.524 ns        0.524 ns   1000000000
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:54:36
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            3 ns          3 ns  201752526
+benchmark_kvector/test_kvector      25374 ns      25374 ns      27408
+benchmark_kbset/test_kbset          29561 ns      29560 ns      23521
+benchmark_kset_inc/kset_inc        341079 ns     341078 ns       1775
+benchmark_kset_dec/kset_dec             1 ns          1 ns  541938877
 ================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=65536
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365392 bytes
+
 ++ test size: 65536
 ================================================================================
-++ kupid::kbtree{65536}      : get_id() = 65535
-++ kupid::kvector{65536}     : get_id() = 65535
-++ kupid::kbset<65536>       : get_id() = 65535
-++ kupid::kset_inc{65536}    : get_id() = 65535
-++ kupid::kset_dec{65536}    : get_id() = 65535
--------------------------------------------------------------
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         3.28 ns         3.28 ns    211851891
-benchmark_kvector       53973 ns        53929 ns        13586
-benchmark_kbset         53390 ns        53389 ns        13607
-benchmark_kset_inc     975133 ns       975037 ns          946
-benchmark_kset_dec      0.259 ns        0.259 ns   1000000000
+++ size: 65536 | last id: 65535
+------------------------------------------------------------
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:54:42
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            4 ns          4 ns  200389118
+benchmark_kvector/test_kvector      52259 ns      52260 ns      13309
+benchmark_kbset/test_kbset          59902 ns      59903 ns      11441
+benchmark_kset_inc/kset_inc        844245 ns     844043 ns        860
+benchmark_kset_dec/kset_dec             1 ns          1 ns  540350408
 ================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=131072
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365392 bytes
+
 ++ test size: 131072
 ================================================================================
-++ kupid::kbtree{131072}     : get_id() = 131071
-++ kupid::kvector{131072}    : get_id() = 131071
-++ kupid::kbset<131072>      : get_id() = 131071
-++ kupid::kset_inc{131072}   : get_id() = 131071
-++ kupid::kset_dec{131072}   : get_id() = 131071
+++ size: 131072 | last id: 131071
 ------------------------------------------------------------
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         3.78 ns         3.77 ns    189071346
-benchmark_kvector      108001 ns       107997 ns         6096
-benchmark_kbset        102465 ns       102385 ns         6761
-benchmark_kset_inc    3639703 ns      3636457 ns          190
-benchmark_kset_dec      0.261 ns        0.261 ns   1000000000
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:54:48
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            3 ns          3 ns  201321897
+benchmark_kvector/test_kvector     101411 ns     101413 ns       6770
+benchmark_kbset/test_kbset         118345 ns     118345 ns       5843
+benchmark_kset_inc/kset_inc       3071963 ns    3072020 ns        210
+benchmark_kset_dec/kset_dec             1 ns          1 ns  544189869
 ================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=1048576
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365400 bytes
+
 ++ test size: 1048576
 ================================================================================
-++ kupid::kbtree{1048576}    : get_id() = 1048575
-++ kupid::kvector{1048576}   : get_id() = 1048575
-++ kupid::kbset<1048576>     : get_id() = 1048575
-++ kupid::kset_inc{1048576}  : get_id() = 1048575
-++ kupid::kset_dec{1048576}  : get_id() = 1048575
--------------------------------------------------------------
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         5.10 ns         5.10 ns    100000000
-benchmark_kvector      820563 ns       820529 ns          839
-benchmark_kbset        812895 ns       812189 ns          848
-benchmark_kset_inc   54200376 ns     54191671 ns           10
-benchmark_kset_dec      0.260 ns        0.260 ns   1000000000
+++ size: 1048576 | last id: 1048575
+------------------------------------------------------------
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:54:55
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            5 ns          5 ns  149280318
+benchmark_kvector/test_kvector     811928 ns     811860 ns        849
+benchmark_kbset/test_kbset         947592 ns     947521 ns        730
+benchmark_kset_inc/kset_inc      38056592 ns   38051691 ns         17
+benchmark_kset_dec/kset_dec             1 ns          1 ns  536645361
 ================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=8388608
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365400 bytes
+
 ++ test size: 8388608
 ================================================================================
-++ kupid::kbtree{8388608}    : get_id() = 8388607
-++ kupid::kvector{8388608}   : get_id() = 8388607
-++ kupid::kbset<8388608>     : get_id() = 8388607
-++ kupid::kset_inc{8388608}  : get_id() = 8388607
-++ kupid::kset_dec{8388608}  : get_id() = 8388607
--------------------------------------------------------------
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         4.73 ns         4.73 ns    146625039
-benchmark_kvector     7128804 ns      7100775 ns          107
-benchmark_kbset       6618361 ns      6607357 ns          107
-benchmark_kset_inc  506977806 ns    505701830 ns            2
-benchmark_kset_dec      0.275 ns        0.275 ns   1000000000
+++ size: 8388608 | last id: 8388607
+------------------------------------------------------------
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:55:07
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            5 ns          5 ns  150281066
+benchmark_kvector/test_kvector    6562127 ns    6559931 ns        105
+benchmark_kbset/test_kbset        7666896 ns    7666788 ns         91
+benchmark_kset_inc/kset_inc     507186960 ns  507187567 ns          2
+benchmark_kset_dec/kset_dec             1 ns          1 ns  544188871
 ================================================================================
+-- The CXX compiler identification is GNU 7.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+++ Compile definitions: KUPID_VERSION="0.2.1";BMARK_TEST_SIZE=16777216
+++ CMake build type: Release
+++ C++ standard: 14
+++ C++ flags: -O3 -DNDEBUG
+++ will use __builtin_ffsll(x) to find the first zero bit
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/orhanku/ME/DEV/OK/find-first-id/benchmark/build
+
+Scanning dependencies of target bmark-kupid
+[ 50%] Building CXX object CMakeFiles/bmark-kupid.dir/src/benchmark.cpp.o
+[100%] Linking CXX executable ../bmark-kupid
+[100%] Built target bmark-kupid
+
+++ successfully built:
+bmark-kupid - 365400 bytes
+
 ++ test size: 16777216
 ================================================================================
-++ kupid::kbtree{16777216}   : get_id() = 16777215
-++ kupid::kvector{16777216}  : get_id() = 16777215
-++ kupid::kbset<16777216>    : get_id() = 16777215
-++ kupid::kset_inc{16777216} : get_id() = 16777215
-++ kupid::kset_dec{16777216} : get_id() = 16777215
--------------------------------------------------------------
-Benchmark                   Time             CPU   Iterations
--------------------------------------------------------------
-benchmark_kbtree         6.27 ns         6.27 ns    115108478
-benchmark_kvector    14173959 ns     14171426 ns           54
-benchmark_kbset      13237401 ns     13222227 ns           53
-benchmark_kset_inc  895506054 ns    887713218 ns            1
-benchmark_kset_dec      0.262 ns        0.262 ns   1000000000
+++ size: 16777216 | last id: 16777215
+------------------------------------------------------------
+Run on (4 X 3900 MHz CPU s)
+2020-07-12 18:56:01
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+----------------------------------------------------------------------
+Benchmark                               Time           CPU Iterations
+----------------------------------------------------------------------
+benchmark_kbtree/test_kbtree            6 ns          6 ns  112631629
+benchmark_kvector/test_kvector   13015526 ns   13013996 ns         54
+benchmark_kbset/test_kbset       15175448 ns   15172165 ns         46
+benchmark_kset_inc/kset_inc     511558361 ns  511495590 ns          1
+benchmark_kset_dec/kset_dec             1 ns          1 ns  546464089
 ================================================================================
 ```
