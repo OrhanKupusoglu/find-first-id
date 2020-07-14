@@ -42,6 +42,9 @@ namespace kupid {
                 uint32_t slice = size;
                 div_mod dm;
 
+                // max 6 data layers: 2^32 = (2^6)^5 x (2^2)
+                _data.reserve(6);
+
                 do {
                     dm = get_div_and_mod_by_64(slice);
                     slice = get_div_or_plus_1(dm);
@@ -56,6 +59,8 @@ namespace kupid {
                     _data.push_back(std::make_unique<uint64_t[]>(slice));
 #endif
                 } while (dm.div > 0);
+
+                _data.shrink_to_fit();
             }
 
             kbtree() = delete;

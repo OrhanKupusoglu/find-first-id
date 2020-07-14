@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include <bitset>
-#include "../include/kgeneric.h"
+#include "../include/kcommon_tests.h"
 #include "../../src/include/kbtree.h"
 
 TEST(TestKBTree, BTreeDivMod) {
@@ -223,7 +223,7 @@ TEST(TestKBTree, BTreeDataByIndex) {
 
 // common tests
 
-kgeneric<kupid::kbtree> test_kbtree{"kupid::kbtree"};
+kcommon_tests<kupid::kbtree> test_kbtree{"kupid::kbtree"};
 
 TEST(TestKBTree, SizeZero) {
     test_kbtree.test_size_zero();

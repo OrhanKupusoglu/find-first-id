@@ -1,14 +1,13 @@
-#include <typeinfo>
 #include "gtest/gtest.h"
 #include "../include/krandom.h"
 #include "../../src/include/kbset.h"
 
 template<typename T>
-class kgeneric {
+class kcommon_tests {
     public:
-        kgeneric(std::string name) : _name{name} {};
+        kcommon_tests(std::string name) : _name{name} {};
 
-        kgeneric() = delete;
+        kcommon_tests() = delete;
 
         void test_size_zero() {
             uint32_t size = 0;
