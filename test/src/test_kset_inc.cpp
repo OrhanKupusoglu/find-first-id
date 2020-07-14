@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
-#include "../include/kgeneric.h"
+#include "../include/kcommon_tests.h"
 #include "../../src/include/kset_inc.h"
 
-kgeneric<kupid::kset_inc> test_kset_inc{"kupid::kset_inc"};
+kcommon_tests<kupid::kset_inc> test_kset_inc{"kupid::kset_inc"};
 
 TEST(TestKSetInc, SizeZero) {
     test_kset_inc.test_size_zero();

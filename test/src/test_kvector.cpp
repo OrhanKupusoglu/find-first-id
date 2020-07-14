@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
-#include "../include/kgeneric.h"
+#include "../include/kcommon_tests.h"
 #include "../../src/include/kvector.h"
 
-kgeneric<kupid::kvector> test_kvector{"kupid::kvector"};
+kcommon_tests<kupid::kvector> test_kvector{"kupid::kvector"};
 
 TEST(TestKVector, SizeZero) {
     test_kvector.test_size_zero();
