@@ -15,7 +15,7 @@ namespace kupid {
         public:
             kbset() = default;
 
-            int get_id(bool is_using = true) {
+            int next(bool is_using = true) {
                 for (uint32_t id = 0 ; id < _size; ++id) {
                     if (_data.test(id) == false) {
                         if (is_using) {
