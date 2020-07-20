@@ -479,7 +479,7 @@ $ ./loop.sh -h
 
 Benchmark results indicate that among the five classes the one using the std::set with decreasing size (start with all IDs as available, and remove used IDs), **kupid::kset_dec**, are faster than the others.
 
-The success of **kupid::kset_dec** was unexpected.
+The success of **kupid::kset_dec** was unexpected. If size is greater than 4 MB, this solution gets increasingly slower to fill.
 
 The innovative **kupid::kbtree** is faster than the three other classes. The difference grows as N goes to UINT32_MAX. The price is higher memory consumption due to position-indicating layers in addition to a more complex class.
 
