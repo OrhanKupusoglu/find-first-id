@@ -16,7 +16,7 @@ class kcommon_tests {
 
             T id_factory = T{size};
 
-            auto id = id_factory.get_id();
+            auto id = id_factory.next();
             std::cout << "#1. id = " << id << '\n';
             ASSERT_EQ(id, -1);
         }
@@ -28,15 +28,15 @@ class kcommon_tests {
 
             T id_factory = T{size};
 
-            auto id = id_factory.get_id(false);
+            auto id = id_factory.next(false);
             std::cout << "#1. id = " << id << " - not marked as used\n";
             ASSERT_EQ(id, 0);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#1. id = " << id << '\n';
             ASSERT_EQ(id, 0);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#2. id = " << id << '\n';
             ASSERT_EQ(id, -1);
         }
@@ -48,15 +48,15 @@ class kcommon_tests {
 
             T id_factory = T{size};
 
-            auto id = id_factory.get_id();
+            auto id = id_factory.next();
             std::cout << "#1. id = " << id << '\n';
             ASSERT_EQ(id, 0);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#2. id = " << id << '\n';
             ASSERT_EQ(id, 1);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#3. id = " << id << '\n';
             ASSERT_EQ(id, -1);
         }
@@ -76,7 +76,7 @@ class kcommon_tests {
 
             std::cout << "id_factory is full\n";
 
-            auto id = id_factory.get_id();
+            auto id = id_factory.next();
             std::cout << "#1. id = " << id << '\n';
             ASSERT_EQ(id, -1);
 
@@ -84,7 +84,7 @@ class kcommon_tests {
 
             std::cout << "id_factory is cleared\n";
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#2. id = " << id << '\n';
             ASSERT_EQ(id, 0);
 
@@ -96,7 +96,7 @@ class kcommon_tests {
 
             std::cout << "id_factory is 1/2 used\n";
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#3. id = " << id << '\n';
             ASSERT_EQ(id, mid);
         }
@@ -124,15 +124,15 @@ class kcommon_tests {
             ASSERT_FALSE(id_factory.is_using(mid));
             ASSERT_FALSE(id_factory.is_using(size - 1));
 
-            auto id = id_factory.get_id();
+            auto id = id_factory.next();
             std::cout << "#1. id = " << id << '\n';
             ASSERT_EQ(id, 0);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#2. id = " << id << '\n';
             ASSERT_EQ(id, mid);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#3. id = " << id << '\n';
             ASSERT_EQ(id, size - 1);
 
@@ -140,7 +140,7 @@ class kcommon_tests {
             ASSERT_TRUE(id_factory.is_using(mid));
             ASSERT_TRUE(id_factory.is_using(size - 1));
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#4. id = " << id << '\n';
             ASSERT_EQ(id, -1);
 
@@ -176,15 +176,15 @@ class kcommon_tests {
             ASSERT_FALSE(id_factory.is_using(mid));
             ASSERT_FALSE(id_factory.is_using(size - 1));
 
-            auto id = id_factory.get_id();
+            auto id = id_factory.next();
             std::cout << "#1. id = " << id << '\n';
             ASSERT_EQ(id, 0);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#2. id = " << id << '\n';
             ASSERT_EQ(id, mid);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#3. id = " << id << '\n';
             ASSERT_EQ(id, size - 1);
 
@@ -192,7 +192,7 @@ class kcommon_tests {
             ASSERT_TRUE(id_factory.is_using(mid));
             ASSERT_TRUE(id_factory.is_using(size - 1));
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#4. id = " << id << '\n';
             ASSERT_EQ(id, -1);
 
@@ -228,16 +228,16 @@ class kcommon_tests {
             ASSERT_FALSE(id_factory.is_using(mid));
             ASSERT_FALSE(id_factory.is_using(size - 1));
 
-            auto id = id_factory.get_id();
+            auto id = id_factory.next();
             std::cout << "#1. id = " << id << '\n';
             ASSERT_EQ(id, 0);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#2. id = " << id << '\n';
 
             ASSERT_EQ(id, mid);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#3. id = " << id << '\n';
             ASSERT_EQ(id, size - 1);
 
@@ -245,7 +245,7 @@ class kcommon_tests {
             ASSERT_TRUE(id_factory.is_using(mid));
             ASSERT_TRUE(id_factory.is_using(size - 1));
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#4. id = " << id << '\n';
             ASSERT_EQ(id, -1);
 
@@ -282,16 +282,16 @@ class kcommon_tests {
             ASSERT_FALSE(id_factory.is_using(mid));
             ASSERT_FALSE(id_factory.is_using(size - 1));
 
-            auto id = id_factory.get_id();
+            auto id = id_factory.next();
             std::cout << "#1. id = " << id << '\n';
             ASSERT_EQ(id, 0);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#2. id = " << id << '\n';
 
             ASSERT_EQ(id, mid);
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#3. id = " << id << '\n';
             ASSERT_EQ(id, size - 1);
 
@@ -299,7 +299,7 @@ class kcommon_tests {
             ASSERT_TRUE(id_factory.is_using(mid));
             ASSERT_TRUE(id_factory.is_using(size - 1));
 
-            id = id_factory.get_id();
+            id = id_factory.next();
             std::cout << "#4. id = " << id << '\n';
             ASSERT_EQ(id, -1);
 
@@ -337,7 +337,7 @@ class kcommon_tests {
                     id_factory.free_id(rnd_num);
                     ASSERT_FALSE(id_factory.is_using(rnd_num));
 
-                    auto id = id_factory.get_id();
+                    auto id = id_factory.next();
                     std::cout << "#" << j << ". id = " << id << '\n';
                     ASSERT_EQ(id, rnd_num);
                 }
@@ -370,7 +370,7 @@ class kcommon_tests {
             }
 
             for (int i = 0; i < rnd_size; ++i) {
-                auto id = id_factory.get_id();
+                auto id = id_factory.next();
                 std::cout << "#" << (i + 1) << ". id = " << id << '\n';
 
                 auto it = rnd_set.find(id);

@@ -23,7 +23,7 @@ namespace kupid {
 
             kset_inc() = delete;
 
-            int64_t get_id(bool is_using = true) {
+            int64_t next(bool is_using = true) {
                 uint32_t id;
 
                 if (_size == 0) {

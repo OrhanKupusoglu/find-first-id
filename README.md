@@ -217,46 +217,46 @@ kupid::kbtree
 ------------------------------------------------------------
 ++ size = 8192 : all used
 ++ last id is freed
-get_id() = 8191
-get_id() = -1
+next() = 8191
+next() = -1
 ++ cleared
-get_id() = 0
+next() = 0
 
 kupid::kvector
 ------------------------------------------------------------
 ++ size = 8192 : all used
 ++ last id is freed
-get_id() = 8191
-get_id() = -1
+next() = 8191
+next() = -1
 ++ cleared
-get_id() = 0
+next() = 0
 
 kupid::kbset - templated
 ------------------------------------------------------------
 ++ size = 8192 : all used
 ++ last id is freed
-get_id() = 8191
-get_id() = -1
+next() = 8191
+next() = -1
 ++ cleared
-get_id() = 0
+next() = 0
 
 kupid::kset_inc
 ------------------------------------------------------------
 ++ size = 8192 : all used
 ++ last id is freed
-get_id() = 8191
-get_id() = -1
+next() = 8191
+next() = -1
 ++ cleared
-get_id() = 0
+next() = 0
 
 kupid::kset_dec
 ------------------------------------------------------------
 ++ size = 8192 : all used
 ++ last id is freed
-get_id() = 8191
-get_id() = -1
+next() = 8191
+next() = -1
 ++ cleared
-get_id() = 0
+next() = 0
 
 $ cd ..
 

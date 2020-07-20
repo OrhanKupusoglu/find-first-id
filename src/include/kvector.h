@@ -21,7 +21,7 @@ namespace kupid {
 
             kvector() = delete;
 
-            int64_t get_id(bool is_using = true) {
+            int64_t next(bool is_using = true) {
                 for (uint32_t id = 0 ; id < _size; ++id) {
                     if (_data[id] == false) {
                         if (is_using) {

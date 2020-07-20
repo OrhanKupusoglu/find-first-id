@@ -65,7 +65,7 @@ namespace kupid {
 
             kbtree() = delete;
 
-            int64_t get_id(bool is_using = true) {
+            int64_t next(bool is_using = true) {
                 uint32_t rank = 0;
 
                 for (auto it = _data.rbegin(); it != _data.rend(); ++it) {

@@ -68,7 +68,7 @@ using benchmark_kbtree = KFactory<kupid::kbtree>;
 BENCHMARK_DEFINE_F(benchmark_kbtree, test_kbtree)(benchmark::State& state) {
     uint32_t id;
     while (state.KeepRunning()) {
-        benchmark::DoNotOptimize(id = _id_factory.get_id(false));
+        benchmark::DoNotOptimize(id = _id_factory.next(false));
     }
 }
 
@@ -86,7 +86,7 @@ using benchmark_kvector = KFactory<kupid::kvector>;
 BENCHMARK_DEFINE_F(benchmark_kvector, test_kvector)(benchmark::State& state) {
     uint32_t id;
     while (state.KeepRunning()) {
-        benchmark::DoNotOptimize(id = _id_factory.get_id(false));
+        benchmark::DoNotOptimize(id = _id_factory.next(false));
     }
 }
 
@@ -104,7 +104,7 @@ using benchmark_kbset = KFactory<kupid::kbset<bmark_test_size>>;
 BENCHMARK_DEFINE_F(benchmark_kbset, test_kbset)(benchmark::State& state) {
     uint32_t id;
     while (state.KeepRunning()) {
-        benchmark::DoNotOptimize(id = _id_factory.get_id(false));
+        benchmark::DoNotOptimize(id = _id_factory.next(false));
     }
 }
 
@@ -122,7 +122,7 @@ using benchmark_kset_inc = KFactory<kupid::kset_inc>;
 BENCHMARK_DEFINE_F(benchmark_kset_inc, kset_inc)(benchmark::State& state) {
     uint32_t id;
     while (state.KeepRunning()) {
-        benchmark::DoNotOptimize(id = _id_factory.get_id(false));
+        benchmark::DoNotOptimize(id = _id_factory.next(false));
     }
 }
 
@@ -140,7 +140,7 @@ using benchmark_kset_dec = KFactory<kupid::kset_dec>;
 BENCHMARK_DEFINE_F(benchmark_kset_dec, kset_dec)(benchmark::State& state) {
     uint32_t id;
     while (state.KeepRunning()) {
-        benchmark::DoNotOptimize(id = _id_factory.get_id(false));
+        benchmark::DoNotOptimize(id = _id_factory.next(false));
     }
 }
 

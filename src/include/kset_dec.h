@@ -25,7 +25,7 @@ namespace kupid {
 
             kset_dec() = delete;
 
-            int64_t get_id(bool is_using = true) {
+            int64_t next(bool is_using = true) {
                 auto it = _data.begin();
 
                 if  (it == _data.end()) {

@@ -51,16 +51,16 @@ int main(int argc, char** argv) {
         std::cout << "++ last id is freed\n";
         id_factory.free_id(last);
 
-        auto id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        auto id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
 
         std::cout << "++ cleared\n";
         id_factory.clear();
 
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
     }
 
     std::cout << "\nkupid::kvector\n" << line_sep << '\n';
@@ -76,16 +76,16 @@ int main(int argc, char** argv) {
         std::cout << "++ last id is freed\n";
         id_factory.free_id(last);
 
-        auto id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        auto id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
 
         std::cout << "++ cleared\n";
         id_factory.clear();
 
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
     }
 
     std::cout << "\nkupid::kbset - templated\n" << line_sep << '\n';
@@ -104,16 +104,16 @@ int main(int argc, char** argv) {
         std::cout << "++ last id is freed\n";
         id_factory.free_id(last);
 
-        auto id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        auto id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
 
         std::cout << "++ cleared\n";
         id_factory.clear();
 
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
     }
 
     std::cout << "\nkupid::kset_inc\n" << line_sep << '\n';
@@ -129,16 +129,16 @@ int main(int argc, char** argv) {
         std::cout << "++ last id is freed\n";
         id_factory.free_id(last);
 
-        auto id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        auto id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
 
         std::cout << "++ cleared\n";
         id_factory.clear();
 
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
     }
 
     std::cout << "\nkupid::kset_dec\n" << line_sep << '\n';
@@ -154,15 +154,15 @@ int main(int argc, char** argv) {
         std::cout << "++ last id is freed\n";
         id_factory.free_id(last);
 
-        auto id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        auto id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
 
         std::cout << "++ cleared\n";
         id_factory.clear();
 
-        id = id_factory.get_id();
-        std::cout << "get_id() = " << id << '\n';
+        id = id_factory.next();
+        std::cout << "next() = " << id << '\n';
     }
 }
