@@ -8,6 +8,16 @@ Free a given ID, this ID joins to the set of available IDs.
 
 &nbsp;
 
+## Requirements
+
+In addition to a C++ toolchain the following list of tools, frameworks and libraries are required:
+
+- [CMake](https://cmake.org/): Open-source, cross-platform build tool
+- [Google Test](https://github.com/google/googletest): Google's C++ test framework
+- [Google Benchmark](https://github.com/google/benchmark): A library to benchmark code snippets, similar to unit tests
+
+&nbsp;
+
 ## CPU Support
 
 The name [find-first-set, ffs](https://en.wikipedia.org/wiki/Find_first_set) is used for a [GNU GCC](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html) built-in function.
