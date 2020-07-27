@@ -63,7 +63,11 @@ namespace kupid {
                 _data.shrink_to_fit();
             }
 
-            kbtree() = delete;
+            kbtree() = delete;                                  // default constructor
+            kbtree(const kbtree& copy) = delete;                // copy constructor
+            kbtree& operator=(const kbtree& copy) = delete;     // copy assignment
+            kbtree(kbtree&& move) = default;                    // move constructor
+            kbtree& operator=(kbtree&& move) = default;         // move assignment
 
             int64_t next(bool is_using = true) {
                 uint32_t rank = 0;
