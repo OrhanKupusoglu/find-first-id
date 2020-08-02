@@ -204,7 +204,7 @@ namespace kupid {
     #ifndef DE_BRUIJN_SEQUENCE
                 return __builtin_ffsll(~bits) - 1;
     #else
-                static const std::array<uint8_t, 64> de_bruijn_64 = {
+                static constexpr std::array<uint8_t, 64> de_bruijn_64 = {
                      0,  1, 48,  2, 57, 49, 28,  3,
                     61, 58, 50, 42, 38, 29, 17,  4,
                     62, 55, 59, 36, 53, 51, 43, 22,
@@ -215,7 +215,7 @@ namespace kupid {
                     25, 14, 19,  9, 13,  8,  7,  6
                 };
 
-                static const uint64_t de_bruijn_magic = 0x03F79D71B4CB0A89;
+                static constexpr uint64_t de_bruijn_magic = 0x03F79D71B4CB0A89;
 
                 bits  = ~bits;
                 bits &= -bits;
@@ -235,23 +235,23 @@ namespace kupid {
         private:
             static uint64_t get_on_64_bit(uint8_t i) {
                 // { 1UL << i, i = [0, 64) }
-                static const std::array<uint64_t, 64> on_64 = {
-                    0x0000000000000001, 0x0000000000000002, 0x0000000000000004, 0x0000000000000008,
-                    0x0000000000000010, 0x0000000000000020, 0x0000000000000040, 0x0000000000000080,
-                    0x0000000000000100, 0x0000000000000200, 0x0000000000000400, 0x0000000000000800,
-                    0x0000000000001000, 0x0000000000002000, 0x0000000000004000, 0x0000000000008000,
-                    0x0000000000010000, 0x0000000000020000, 0x0000000000040000, 0x0000000000080000,
-                    0x0000000000100000, 0x0000000000200000, 0x0000000000400000, 0x0000000000800000,
-                    0x0000000001000000, 0x0000000002000000, 0x0000000004000000, 0x0000000008000000,
-                    0x0000000010000000, 0x0000000020000000, 0x0000000040000000, 0x0000000080000000,
-                    0x0000000100000000, 0x0000000200000000, 0x0000000400000000, 0x0000000800000000,
-                    0x0000001000000000, 0x0000002000000000, 0x0000004000000000, 0x0000008000000000,
-                    0x0000010000000000, 0x0000020000000000, 0x0000040000000000, 0x0000080000000000,
-                    0x0000100000000000, 0x0000200000000000, 0x0000400000000000, 0x0000800000000000,
-                    0x0001000000000000, 0x0002000000000000, 0x0004000000000000, 0x0008000000000000,
-                    0x0010000000000000, 0x0020000000000000, 0x0040000000000000, 0x0080000000000000,
-                    0x0100000000000000, 0x0200000000000000, 0x0400000000000000, 0x0800000000000000,
-                    0x1000000000000000, 0x2000000000000000, 0x4000000000000000, 0x8000000000000000
+                static constexpr std::array<uint64_t, 64> on_64 = {
+                    1UL << 0,  1UL << 1,  1UL << 2,  1UL << 3,
+                    1UL << 4,  1UL << 5,  1UL << 6,  1UL << 7,
+                    1UL << 8,  1UL << 9,  1UL << 10, 1UL << 11,
+                    1UL << 12, 1UL << 13, 1UL << 14, 1UL << 15,
+                    1UL << 16, 1UL << 17, 1UL << 18, 1UL << 19,
+                    1UL << 20, 1UL << 21, 1UL << 22, 1UL << 23,
+                    1UL << 24, 1UL << 25, 1UL << 26, 1UL << 27,
+                    1UL << 28, 1UL << 29, 1UL << 30, 1UL << 31,
+                    1UL << 32, 1UL << 33, 1UL << 34, 1UL << 35,
+                    1UL << 36, 1UL << 37, 1UL << 38, 1UL << 39,
+                    1UL << 40, 1UL << 41, 1UL << 42, 1UL << 43,
+                    1UL << 44, 1UL << 45, 1UL << 46, 1UL << 47,
+                    1UL << 48, 1UL << 49, 1UL << 50, 1UL << 51,
+                    1UL << 52, 1UL << 53, 1UL << 54, 1UL << 55,
+                    1UL << 56, 1UL << 57, 1UL << 58, 1UL << 59,
+                    1UL << 60, 1UL << 61, 1UL << 62, 1UL << 63
                 };
 
                 return on_64[i];
@@ -259,23 +259,23 @@ namespace kupid {
 
             static uint64_t get_off_64_bit(uint8_t i) {
                 // { ~(1UL << i), i = [0, 64) }
-                static const std::array<uint64_t, 64> off_64 = {
-                    0xfffffffffffffffe, 0xfffffffffffffffd, 0xfffffffffffffffb, 0xfffffffffffffff7,
-                    0xffffffffffffffef, 0xffffffffffffffdf, 0xffffffffffffffbf, 0xffffffffffffff7f,
-                    0xfffffffffffffeff, 0xfffffffffffffdff, 0xfffffffffffffbff, 0xfffffffffffff7ff,
-                    0xffffffffffffefff, 0xffffffffffffdfff, 0xffffffffffffbfff, 0xffffffffffff7fff,
-                    0xfffffffffffeffff, 0xfffffffffffdffff, 0xfffffffffffbffff, 0xfffffffffff7ffff,
-                    0xffffffffffefffff, 0xffffffffffdfffff, 0xffffffffffbfffff, 0xffffffffff7fffff,
-                    0xfffffffffeffffff, 0xfffffffffdffffff, 0xfffffffffbffffff, 0xfffffffff7ffffff,
-                    0xffffffffefffffff, 0xffffffffdfffffff, 0xffffffffbfffffff, 0xffffffff7fffffff,
-                    0xfffffffeffffffff, 0xfffffffdffffffff, 0xfffffffbffffffff, 0xfffffff7ffffffff,
-                    0xffffffefffffffff, 0xffffffdfffffffff, 0xffffffbfffffffff, 0xffffff7fffffffff,
-                    0xfffffeffffffffff, 0xfffffdffffffffff, 0xfffffbffffffffff, 0xfffff7ffffffffff,
-                    0xffffefffffffffff, 0xffffdfffffffffff, 0xffffbfffffffffff, 0xffff7fffffffffff,
-                    0xfffeffffffffffff, 0xfffdffffffffffff, 0xfffbffffffffffff, 0xfff7ffffffffffff,
-                    0xffefffffffffffff, 0xffdfffffffffffff, 0xffbfffffffffffff, 0xff7fffffffffffff,
-                    0xfeffffffffffffff, 0xfdffffffffffffff, 0xfbffffffffffffff, 0xf7ffffffffffffff,
-                    0xefffffffffffffff, 0xdfffffffffffffff, 0xbfffffffffffffff, 0x7fffffffffffffff
+                static constexpr std::array<uint64_t, 64> off_64 = {
+                    ~(1UL << 0),  ~(1UL << 1),  ~(1UL << 2),  ~(1UL << 3),
+                    ~(1UL << 4),  ~(1UL << 5),  ~(1UL << 6),  ~(1UL << 7),
+                    ~(1UL << 8),  ~(1UL << 9),  ~(1UL << 10), ~(1UL << 11),
+                    ~(1UL << 12), ~(1UL << 13), ~(1UL << 14), ~(1UL << 15),
+                    ~(1UL << 16), ~(1UL << 17), ~(1UL << 18), ~(1UL << 19),
+                    ~(1UL << 20), ~(1UL << 21), ~(1UL << 22), ~(1UL << 23),
+                    ~(1UL << 24), ~(1UL << 25), ~(1UL << 26), ~(1UL << 27),
+                    ~(1UL << 28), ~(1UL << 29), ~(1UL << 30), ~(1UL << 31),
+                    ~(1UL << 32), ~(1UL << 33), ~(1UL << 34), ~(1UL << 35),
+                    ~(1UL << 36), ~(1UL << 37), ~(1UL << 38), ~(1UL << 39),
+                    ~(1UL << 40), ~(1UL << 41), ~(1UL << 42), ~(1UL << 43),
+                    ~(1UL << 44), ~(1UL << 45), ~(1UL << 46), ~(1UL << 47),
+                    ~(1UL << 48), ~(1UL << 49), ~(1UL << 50), ~(1UL << 51),
+                    ~(1UL << 52), ~(1UL << 53), ~(1UL << 54), ~(1UL << 55),
+                    ~(1UL << 56), ~(1UL << 57), ~(1UL << 58), ~(1UL << 59),
+                    ~(1UL << 60), ~(1UL << 61), ~(1UL << 62), ~(1UL << 63)
                 };
 
                 return off_64[i];
