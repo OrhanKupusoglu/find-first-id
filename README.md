@@ -214,7 +214,7 @@ Scanning dependencies of target kupid
 [100%] Built target kupid
 
 ++ successfully built:
-kupid - 28968 bytes
+kupid - 33120 bytes
 
 $ ./kupid help
 usage:
@@ -320,7 +320,7 @@ Scanning dependencies of target test-kupid
 [100%] Built target test-kupid
 
 ++ successfully built:
-test-kupid - 1053840 bytes
+test-kupid - 1073584 bytes
 
 ++ list of tests:
 TestKBTree.
