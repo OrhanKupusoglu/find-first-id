@@ -46,7 +46,21 @@ As we will see during the benchmarks, this choice has a huge impact on the perfo
 
 &nbsp;
 
-## Algorithm
+## Algorithms
+
+The innovative **kbtree** (BitTree) is developed for this task, and then to compare its performance four other algorithms are developed:
+
+|Name|Description|
+|----|-----------|
+|kupid::kbtree|Layers of bits streams indicate free positions|
+|kupid::kvector|A std::vector&lt;bool&gt; stores availability|
+|kupid::kbset|A std::bitset&lt;size_t N&gt; stores availability|
+|kupid::kset_inc|A std::set&lt;uint32_t&gt; contains used integers, and its size increases as time goes by|
+|kupid::kset_dec|A std::set&lt;uint32_t&gt; contains available integers, and its size decreases as time goes by|
+
+&nbsp;
+
+## BitTree
 
 A BitTree can be imagined as layers of bit streams, where each bit indicates positions of the free bits on the next layer.
 
